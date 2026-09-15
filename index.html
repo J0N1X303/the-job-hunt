@@ -17,11 +17,11 @@
   <div id="start" class="overlay">
     <div class="eyebrow">45 seconds in the 2026 job market</div>
     <h1>GET. THE.<span>INTERVIEW.</span></h1>
-    <div class="sub">Fire your CV through the hiring process. <strong>Human contact is your superpower.</strong></div>
+    <div class="sub">Time your applications through the hiring process. <strong>Every interview levels up the hunt.</strong></div>
     <div class="miniRules">
-      <div class="rule"><b>📄</b>Tap to send your CV</div>
-      <div class="rule"><b>🚧</b>Find the gap in the process</div>
-      <div class="rule"><b>☎️</b>Fill the meter. Call a human.</div>
+      <div class="rule"><b>🎯</b>Tap the hiring manager to send your CV</div>
+      <div class="rule"><b>🚧</b>Time the moving gap and land interviews</div>
+      <div class="rule"><b>🤝</b>Tap green career moves to build human contact</div>
     </div>
     <button id="playBtn">START THE JOB HUNT</button>
     <div class="fine">No CVs were harmed in the making of this game.</div>
@@ -31,14 +31,15 @@
     <div class="hudTop">
       <div class="hudCard"><div class="hudLabel">Time</div><div id="timeHud" class="hudValue">45</div></div>
       <div class="hudCard"><div class="hudLabel">Interviews</div><div id="interviewHud" class="hudValue">0</div></div>
-      <div class="hudCard"><div class="hudLabel">Score</div><div id="scoreHud" class="hudValue">0</div></div>
+      <div class="hudCard"><div class="hudLabel">Level</div><div id="levelHud" class="hudValue">1</div></div>
     </div>
+    <div id="levelStrip"><span id="levelName">STARTING OUT</span><span id="levelGoal">Land your first interview</span></div>
     <div id="humanWrap">
       <div id="meterPanel">
         <div id="meterTitle"><span>Human contact</span><span id="meterPct">0%</span></div>
         <div id="meterTrack"><div id="meterFill"></div></div>
       </div>
-      <button id="phoneBtn" aria-label="Use human contact">☎️</button>
+      <button id="phoneBtn" aria-label="Use warm introduction">☎️</button>
     </div>
   </div>
   <div id="toast"></div>
@@ -51,10 +52,10 @@
       <div class="stats">
         <div class="stat"><span>Applications</span><b id="sApps">0</b></div>
         <div class="stat"><span>Interviews</span><b id="sInts">0</b></div>
-        <div class="stat"><span>ATS / process rejections</span><b id="sRejects">0</b></div>
-        <div class="stat"><span>Ghosted</span><b id="sGhosted">0</b></div>
-        <div class="stat"><span>Jobs reposted</span><b id="sReposted">0</b></div>
-        <div class="stat"><span>Human conversations</span><b id="sCalls">0</b></div>
+        <div class="stat"><span>Process rejections</span><b id="sRejects">0</b></div>
+        <div class="stat"><span>Career moves</span><b id="sMoves">0</b></div>
+        <div class="stat"><span>Warm intros</span><b id="sCalls">0</b></div>
+        <div class="stat"><span>Level reached</span><b id="sLevel">1</b></div>
       </div>
       <div id="resultLine"></div>
       <div class="buttonRow">
