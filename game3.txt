@@ -1,76 +1,18 @@
-
-  function rectHit(a,b){return a.x+a.w/2>b.x&&a.x-a.w/2<b.x+b.w&&a.y+a.h/2>b.y&&a.y-a.h/2<b.y+b.h;}
-  function pointIn(px,py,r){return px>=r.x&&px<=r.x+r.w&&py>=r.y&&py<=r.y+r.h;}
-
-  function update(dt,now){
-    elapsed=(now-startTime)/1000;
-    const superActive=now<superUntil;
-    gates.forEach((g,i)=>{
-      const difficulty=Math.max(0,level-1);
-      g.gap=Math.max(88,g.gapBase-difficulty*4);
-      const amplitude=Math.max(8,W/2-g.gap/2-18);
-      const corridor=W/2+Math.sin(now/1000*g.speed+g.phase)*amplitude;
-      g.x=Math.max(g.gap/2+12,Math.min(W-g.gap/2-12,corridor));
-    });
-
-    shots.forEach(s=>{
-      s.trail.push({x:s.x,y:s.y});if(s.trail.length>5)s.trail.shift();
-      s.x+=s.vx*dt;s.y+=s.vy*dt;
-      if(!superActive&&!s.auto){
-        for(const g of gates){
-          const left=g.x-g.gap/2,right=g.x+g.gap/2;
-          const yHit=s.y-s.h/2<g.y+g.h/2&&s.y+s.h/2>g.y-g.h/2;
-          const inGap=s.x-s.w/2>left&&s.x+s.w/2<right;
-          if(yHit&&!inGap){rejectShot(s,g);break;}
-        }
-      }
-      if(s.alive&&rectHit(s,target))interview(s);
-      if(s.y<-50||s.x<-60||s.x>W+60)s.alive=false;
-    });
-    shots=shots.filter(s=>s.alive);
-
-    if(elapsed>=nextPickupAt){spawnPickup();nextPickupAt+=5.5+Math.random()*2.2;}
-    pickups.forEach(p=>{p.life-=dt;p.y+=Math.sin(now/550+p.phase)*4*dt;});
-    pickups=pickups.filter(p=>p.life>0&&!p.collected);
-
-    particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=120*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);
-    stats.score+=dt*(3+level);
-    if(screenShake>0)screenShake=Math.max(0,screenShake-24*dt);
-    updateHud();
-    if(elapsed>=duration)endGame();
-  }
-
-  function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}}
-
-  function draw(now){
-    ctx.clearRect(0,0,W,H);ctx.save();if(screenShake)ctx.translate((Math.random()-.5)*screenShake,(Math.random()-.5)*screenShake);
-    drawBackdrop();
-    if(state==='play'){drawTarget(now);drawGates(now);drawPickups(now);drawLauncher(now);drawShots();drawParticles();if(now<superUntil)drawSuper(now);if(now<levelBannerUntil)drawLevelBanner(now);}
-    ctx.restore();
-  }
-
-  function drawBackdrop(){
-    ctx.save();ctx.globalAlpha=.5;ctx.strokeStyle='rgba(255,255,255,.035)';ctx.lineWidth=1;const step=38;
-    for(let x=0;x<W;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-    for(let y=0;y<H;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}ctx.restore();
-  }
-
-  function drawTarget(now){
-    const pulse=.35+.18*Math.sin(now/170);
-    ctx.save();ctx.shadowColor=`rgba(85,216,255,${pulse})`;ctx.shadowBlur=18;
-    roundRect(target.x,target.y,target.w,target.h,14,'#12243a','rgba(85,216,255,.55)');ctx.restore();
-    ctx.fillStyle='#55d8ff';ctx.font='800 10px system-ui';ctx.textAlign='center';ctx.fillText('HIRING MANAGER',target.x+target.w/2,target.y+18);
-    ctx.fillStyle='#f7f9fc';ctx.font='900 16px system-ui';ctx.fillText('INTERVIEW',target.x+target.w/2,target.y+38);
-  }
-
-  function drawGates(now){
-    const superActive=now<superUntil;
-    gates.forEach(g=>{
-      const l=g.x-g.gap/2,r=g.x+g.gap/2;ctx.globalAlpha=superActive?.18:1;
-      const grad=ctx.createLinearGradient(0,g.y,W,g.y);grad.addColorStop(0,'#26344a');grad.addColorStop(1,'#1b2639');
-      roundRect(0,g.y-g.h/2,Math.max(0,l),g.h,8,grad);roundRect(r,g.y-g.h/2,Math.max(0,W-r),g.h,8,grad);
-      ctx.fillStyle=superActive?'rgba(201,255,93,.8)':'#ffb85c';ctx.font='800 9px system-ui';ctx.textAlign='left';
-      ctx.fillText(g.label,Math.min(W-125,Math.max(8,l>150?8:r+8)),g.y-18);
-      ctx.strokeStyle=superActive?'rgba(201,255,93,.75)':'rgba(255,200,92,.55)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(l,g.y);ctx.lineTo(r,g.y);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
-    });
-  }
+function updateHud(){timeHud.textContent=Math.max(0,Math.ceil(duration-elapsed));interviewHud.textContent=stats.interviews;levelHud.textContent=level;meterFill.style.width=human+'%';meterPct.textContent=Math.round(human)+'%';phoneBtn.classList.toggle('ready',human>=100);levelName.textContent=level===1?'FIRST APPLICATION':level===2?'GETTING NOTICED':level===3?'SHORTLISTED':'LEVEL '+level;levelGoal.textContent=level===1?'Steer through 1 filter':level===2?'Now there are 2':level===3?'Three filters. Keep moving.':'Gaps are getting tighter'}
+function update(dt,now){
+ elapsed=(now-startTime)/1000;const superActive=now<superUntil;
+ gates.forEach((g,i)=>{if(level>1)g.x=W/2+Math.sin(now/1000*g.speed+g.phase)*Math.max(8,W/2-g.gap/2-16)});
+ if(cv&&cv.alive){
+   cv.x+=(controlX-cv.x)*Math.min(1,dt*8.5);cv.x=Math.max(18,Math.min(W-18,cv.x));cv.y+=cv.vy*dt;
+   if(cv.bounce>0){cv.bounce-=dt;if(cv.bounce<=0)cv.vy=superActive?-500:-330}
+   if(!superActive&&cv.vy<0){for(let i=0;i<gates.length;i++){const g=gates[i];if(cv.cleared.has(i))continue;const l=g.x-g.gap/2,r=g.x+g.gap/2;const crossing=cv.y-cv.h/2<g.y+g.h/2&&cv.y+cv.h/2>g.y-g.h/2;const inside=cv.x-cv.w/2>l&&cv.x+cv.w/2<r;if(crossing){if(inside){cv.cleared.add(i);stats.score+=35;burst(cv.x,g.y,'#55d8ff',5)}else{bounce(g)}break}}}
+   if(superActive)cv.vy=-500;
+   for(const p of pickups){if(p.alive&&Math.hypot(cv.x-p.x,cv.y-p.y)<p.r+16)collectPickup(p)}
+   if(cv.alive&&cv.y<target.y+target.h&&cv.x>target.x-12&&cv.x<target.x+target.w+12)interview();
+   if(cv&&cv.alive&&cv.y>H-80&&cv.vy>0){cv.y=H-112;cv.vy=-330;cv.bounce=0}
+ }
+ pickups=pickups.filter(p=>p.alive);particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=100*dt;p.life-=dt});particles=particles.filter(p=>p.life>0);stats.score+=dt*4;updateHud();if(elapsed>=duration)endGame()
+}
+function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.stroke()}}
+function drawBackdrop(){ctx.save();ctx.globalAlpha=.45;ctx.strokeStyle='rgba(255,255,255,.035)';for(let x=0;x<W;x+=38){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=0;y<H;y+=38){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}ctx.restore()}
+function drawTarget(){roundRect(target.x,target.y,target.w,target.h,14,'#12243a','rgba(85,216,255,.42)');ctx.textAlign='center';ctx.fillStyle='#55d8ff';ctx.font='800 10px system-ui';ctx.fillText('HIRING MANAGER',W/2,target.y+18);ctx.fillStyle='#f7f9fc';ctx.font='900 16px system-ui';ctx.fillText('INTERVIEW',W/2,target.y+38)}
