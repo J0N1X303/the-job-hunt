@@ -1,0 +1,47 @@
+    if(navigator.vibrate) navigator.vibrate(18); updateHud();
+  }
+
+  function interview(s){
+    s.alive=false; stats.interviews++; stats.score+=520+Math.round((duration-elapsed)*4); human=Math.min(100,human+34); burst(s.x,s.y,'#c9ff5d',18);
+    showToast('🎉 INTERVIEW!');
+    if(Math.random()<.22){ stats.reposted++; showToast('🔁 Great! The role has also been reposted.'); }
+    moveTarget(); gates.forEach((g,i)=>g.label=obstacleNames[(Math.floor(Math.random()*obstacleNames.length)+i)%obstacleNames.length]);
+    if(navigator.vibrate) navigator.vibrate([12,20,12]); updateHud();
+  }
+
+  function burst(x,y,color,count=10){
+    for(let i=0;i<count;i++){ const a=Math.random()*Math.PI*2, sp=40+Math.random()*130; particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.55+Math.random()*.35,color,size:2+Math.random()*4}); }
+  }
+
+  function updateHud(){
+    const left=Math.max(0,Math.ceil(duration-elapsed)); timeHud.textContent=left; interviewHud.textContent=stats.interviews; scoreHud.textContent=Math.round(stats.score).toLocaleString();
+    meterFill.style.width=human+'%'; meterPct.textContent=Math.round(human)+'%'; phoneBtn.classList.toggle('ready',human>=100);
+  }
+
+  function rectHit(a,b){ return a.x+a.w/2>b.x && a.x-a.w/2<b.x+b.w && a.y+a.h/2>b.y && a.y-a.h/2<b.y+b.h; }
+
+  function update(dt,now){
+    elapsed=(now-startTime)/1000; difficulty=1+elapsed/26;
+    const superActive=now<superUntil;
+    gates.forEach((g,i)=>{
+      g.gap=Math.max(70,g.gapBase-(difficulty-1)*20);
+      g.x=W/2 + Math.sin(now/1000*g.speed*difficulty+g.phase)*(W/2-g.gap/2-14);
+    });
+    shots.forEach(s=>{
+      s.trail.push({x:s.x,y:s.y}); if(s.trail.length>5)s.trail.shift();
+      s.x+=s.vx*dt; s.y+=s.vy*dt;
+      if(!superActive && !s.auto){
+        for(const g of gates){
+          const top=g.y-g.h/2, leftGap=g.x-g.gap/2, rightGap=g.x+g.gap/2;
+          const yHit=s.y-s.h/2<g.y+g.h/2 && s.y+s.h/2>top;
+          const inGap=s.x-s.w/2>leftGap && s.x+s.w/2<rightGap;
+          if(yHit && !inGap){ rejectShot(s,g); break; }
+        }
+      }
+      if(s.alive && rectHit(s,target)) interview(s);
+      if(s.y<-40 || s.x<-50 || s.x>W+50) s.alive=false;
+    });
+    shots=shots.filter(s=>s.alive);
+    particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=120*dt;p.life-=dt;}); particles=particles.filter(p=>p.life>0);
+    stats.score += dt*5;
+    if(screenShake>0) screenShake=Math.max(0,screenShake-24*dt);
