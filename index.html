@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#09111f" />
+  <meta property="og:title" content="The Job Hunt — Get. The. Interview." />
+  <meta property="og:description" content="A 45-second arcade game about surviving the modern job market." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>The Job Hunt</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="shell">
+  <canvas id="game"></canvas>
+
+  <div id="start" class="overlay">
+    <div class="eyebrow">45 seconds in the 2026 job market</div>
+    <h1>GET. THE.<span>INTERVIEW.</span></h1>
+    <div class="sub">Fire your CV through the hiring process. <strong>Human contact is your superpower.</strong></div>
+    <div class="miniRules">
+      <div class="rule"><b>📄</b>Tap to send your CV</div>
+      <div class="rule"><b>🚧</b>Find the gap in the process</div>
+      <div class="rule"><b>☎️</b>Fill the meter. Call a human.</div>
+    </div>
+    <button id="playBtn">START THE JOB HUNT</button>
+    <div class="fine">No CVs were harmed in the making of this game.</div>
+  </div>
+
+  <div id="hud" class="hidden">
+    <div class="hudTop">
+      <div class="hudCard"><div class="hudLabel">Time</div><div id="timeHud" class="hudValue">45</div></div>
+      <div class="hudCard"><div class="hudLabel">Interviews</div><div id="interviewHud" class="hudValue">0</div></div>
+      <div class="hudCard"><div class="hudLabel">Score</div><div id="scoreHud" class="hudValue">0</div></div>
+    </div>
+    <div id="humanWrap">
+      <div id="meterPanel">
+        <div id="meterTitle"><span>Human contact</span><span id="meterPct">0%</span></div>
+        <div id="meterTrack"><div id="meterFill"></div></div>
+      </div>
+      <button id="phoneBtn" aria-label="Use human contact">☎️</button>
+    </div>
+  </div>
+  <div id="toast"></div>
+
+  <div id="gameover" class="overlay hidden">
+    <div id="resultsCard">
+      <div class="resultTitle">Job Market Survival Score</div>
+      <div id="bigScore" class="bigScore">0</div>
+      <div class="scoreCaption">points</div>
+      <div class="stats">
+        <div class="stat"><span>Applications</span><b id="sApps">0</b></div>
+        <div class="stat"><span>Interviews</span><b id="sInts">0</b></div>
+        <div class="stat"><span>ATS / process rejections</span><b id="sRejects">0</b></div>
+        <div class="stat"><span>Ghosted</span><b id="sGhosted">0</b></div>
+        <div class="stat"><span>Jobs reposted</span><b id="sReposted">0</b></div>
+        <div class="stat"><span>Human conversations</span><b id="sCalls">0</b></div>
+      </div>
+      <div id="resultLine"></div>
+      <div class="buttonRow">
+        <button id="againBtn">PLAY AGAIN</button>
+        <button id="shareBtn" class="secondary">SHARE SCORE</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="loader.js"></script>
+</body>
+</html>
