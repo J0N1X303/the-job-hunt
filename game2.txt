@@ -1,0 +1,47 @@
+      label: obstacleNames[(i+Math.floor(Math.random()*obstacleNames.length))%obstacleNames.length]
+    }));
+  }
+
+  function startGame(){
+    resetStats(); human=0; superUntil=0; shots=[]; particles=[]; elapsed=0; difficulty=1; screenShake=0;
+    setupGates(); moveTarget();
+    state='play'; start.classList.add('hidden'); gameover.classList.add('hidden'); hud.classList.remove('hidden');
+    startTime=performance.now(); last=startTime; updateHud();
+    cancelAnimationFrame(raf); raf=requestAnimationFrame(loop);
+  }
+
+  function moveTarget(){
+    target.x=18+Math.random()*Math.max(1,W-target.w-36);
+  }
+
+  function fireAt(x,y,auto=false){
+    if(state!=='play') return;
+    const now=performance.now();
+    const origin={x:W/2,y:H-105};
+    let tx=x,ty=y;
+    if(auto){ tx=target.x+target.w/2; ty=target.y+target.h/2; }
+    const dx=tx-origin.x, dy=ty-origin.y; const mag=Math.max(1,Math.hypot(dx,dy));
+    const speed=620;
+    shots.push({x:origin.x,y:origin.y,vx:dx/mag*speed,vy:dy/mag*speed,w:28,h:18,alive:true,auto,trail:[]});
+    stats.apps++; stats.score+=8; updateHud();
+    if(navigator.vibrate) navigator.vibrate(7);
+  }
+
+  function useHuman(){
+    if(state!=='play' || human<100) return;
+    human=0; stats.calls++; superUntil=performance.now()+2500; showToast('☎️ HUMAN CONTACT — “Hi, thanks for reaching out…”');
+    phoneBtn.classList.remove('ready'); updateHud();
+    setTimeout(()=>{ if(state==='play') fireAt(0,0,true); },180);
+    if(navigator.vibrate) navigator.vibrate([20,30,20]);
+  }
+
+  function showToast(text){
+    clearTimeout(toastTimer); toastEl.textContent=text; toastEl.classList.add('show');
+    toastTimer=setTimeout(()=>toastEl.classList.remove('show'),900);
+  }
+
+  function rejectShot(s, gate){
+    s.alive=false; stats.rejects++; stats.score=Math.max(0,stats.score-12); human=Math.min(100,human+6); screenShake=5;
+    if(Math.random()<.18) stats.ghosted++;
+    burst(s.x,s.y,'#ff6878');
+    showToast(Math.random()<.28 ? gate.label : rejectionLines[Math.floor(Math.random()*rejectionLines.length)]);
