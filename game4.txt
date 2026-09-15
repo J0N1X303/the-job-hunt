@@ -1,0 +1,47 @@
+    updateHud();
+    if(elapsed>=duration) endGame();
+  }
+
+  function draw(now){
+    ctx.clearRect(0,0,W,H); ctx.save();
+    if(screenShake){ctx.translate((Math.random()-.5)*screenShake,(Math.random()-.5)*screenShake);}
+    drawBackdrop();
+    if(state==='play'){ drawTarget(); drawGates(now); drawLauncher(); drawShots(); drawParticles(); if(now<superUntil) drawSuper(now); }
+    ctx.restore();
+  }
+
+  function roundRect(x,y,w,h,r,fill,stroke){
+    ctx.beginPath(); ctx.roundRect(x,y,w,h,r); if(fill){ctx.fillStyle=fill;ctx.fill();} if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}
+  }
+
+  function drawBackdrop(){
+    ctx.save(); ctx.globalAlpha=.5; ctx.strokeStyle='rgba(255,255,255,.035)'; ctx.lineWidth=1;
+    const step=38; for(let x=0;x<W;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();} for(let y=0;y<H;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+    ctx.restore();
+  }
+
+  function drawTarget(){
+    roundRect(target.x,target.y,target.w,target.h,13,'#12243a','rgba(85,216,255,.35)');
+    ctx.fillStyle='#55d8ff'; ctx.font='800 10px system-ui'; ctx.textAlign='center'; ctx.fillText('HIRING MANAGER',target.x+target.w/2,target.y+17);
+    ctx.fillStyle='#f7f9fc'; ctx.font='900 16px system-ui'; ctx.fillText('INTERVIEW',target.x+target.w/2,target.y+35);
+  }
+
+  function drawGates(now){
+    const superActive=now<superUntil;
+    gates.forEach(g=>{
+      const l=g.x-g.gap/2, r=g.x+g.gap/2;
+      ctx.globalAlpha=superActive?.22:1;
+      const grad=ctx.createLinearGradient(0,g.y,W,g.y); grad.addColorStop(0,'#26344a'); grad.addColorStop(1,'#1b2639');
+      roundRect(0,g.y-g.h/2,Math.max(0,l),g.h,8,grad);
+      roundRect(r,g.y-g.h/2,Math.max(0,W-r),g.h,8,grad);
+      ctx.fillStyle=superActive?'rgba(201,255,93,.7)':'#ffb85c'; ctx.font='800 9px system-ui'; ctx.textAlign='left';
+      const labelX=Math.min(W-8,Math.max(8,l>145?8:r+8)); ctx.fillText(g.label,labelX,g.y-18);
+      ctx.strokeStyle=superActive?'rgba(201,255,93,.7)':'rgba(255,200,92,.45)'; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(l,g.y);ctx.lineTo(r,g.y);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
+    });
+  }
+
+  function drawLauncher(){
+    const x=W/2,y=H-105;
+    roundRect(x-34,y-24,68,48,14,'#101c2f','rgba(255,255,255,.1)');
+    ctx.fillStyle='#f7f9fc'; ctx.font='900 24px system-ui'; ctx.textAlign='center'; ctx.fillText('📄',x,y+8);
+    ctx.fillStyle='#6f7f98'; ctx.font='800 9px system-ui'; ctx.fillText('YOU',x,y+37);
