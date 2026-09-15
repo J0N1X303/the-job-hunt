@@ -1,47 +1,79 @@
-      label: obstacleNames[(i+Math.floor(Math.random()*obstacleNames.length))%obstacleNames.length]
-    }));
-  }
 
   function startGame(){
-    resetStats(); human=0; superUntil=0; shots=[]; particles=[]; elapsed=0; difficulty=1; screenShake=0;
-    setupGates(); moveTarget();
+    resetStats(); human=0; superUntil=0; shots=[]; particles=[]; pickups=[]; elapsed=0; screenShake=0;
+    level=1; firstShot=false; nextPickupAt=3.5; pickupId=0; levelBannerUntil=performance.now()+1500;
+    target.x=W/2-target.w/2; setupGates();
     state='play'; start.classList.add('hidden'); gameover.classList.add('hidden'); hud.classList.remove('hidden');
     startTime=performance.now(); last=startTime; updateHud();
+    showToast('Tap anywhere to send your CV');
     cancelAnimationFrame(raf); raf=requestAnimationFrame(loop);
   }
 
-  function moveTarget(){
-    target.x=18+Math.random()*Math.max(1,W-target.w-36);
-  }
+  function moveTarget(){ target.x=20+Math.random()*Math.max(1,W-target.w-40); }
 
-  function fireAt(x,y,auto=false){
+  function fireCV(auto=false){
     if(state!=='play') return;
-    const now=performance.now();
-    const origin={x:W/2,y:H-105};
-    let tx=x,ty=y;
-    if(auto){ tx=target.x+target.w/2; ty=target.y+target.h/2; }
-    const dx=tx-origin.x, dy=ty-origin.y; const mag=Math.max(1,Math.hypot(dx,dy));
-    const speed=620;
+    const origin={x:W/2,y:H-112};
+    const tx=target.x+target.w/2, ty=target.y+target.h/2;
+    const dx=tx-origin.x,dy=ty-origin.y,mag=Math.max(1,Math.hypot(dx,dy));
+    const speed=690;
     shots.push({x:origin.x,y:origin.y,vx:dx/mag*speed,vy:dy/mag*speed,w:28,h:18,alive:true,auto,trail:[]});
-    stats.apps++; stats.score+=8; updateHud();
-    if(navigator.vibrate) navigator.vibrate(7);
+    stats.apps++; stats.score+=5; firstShot=true; updateHud();
+    if(navigator.vibrate) navigator.vibrate(6);
   }
 
   function useHuman(){
-    if(state!=='play' || human<100) return;
-    human=0; stats.calls++; superUntil=performance.now()+2500; showToast('☎️ HUMAN CONTACT — “Hi, thanks for reaching out…”');
-    phoneBtn.classList.remove('ready'); updateHud();
-    setTimeout(()=>{ if(state==='play') fireAt(0,0,true); },180);
-    if(navigator.vibrate) navigator.vibrate([20,30,20]);
+    if(state!=='play'||human<100) return;
+    human=0; stats.calls++; superUntil=performance.now()+2600; phoneBtn.classList.remove('ready');
+    showToast('☎️ WARM INTRO — “I’ve put in a good word…”'); updateHud();
+    setTimeout(()=>{ if(state==='play') fireCV(true); },180);
+    if(navigator.vibrate) navigator.vibrate([18,28,18]);
   }
 
-  function showToast(text){
+  function showToast(text,ms=1000){
     clearTimeout(toastTimer); toastEl.textContent=text; toastEl.classList.add('show');
-    toastTimer=setTimeout(()=>toastEl.classList.remove('show'),900);
+    toastTimer=setTimeout(()=>toastEl.classList.remove('show'),ms);
   }
 
-  function rejectShot(s, gate){
-    s.alive=false; stats.rejects++; stats.score=Math.max(0,stats.score-12); human=Math.min(100,human+6); screenShake=5;
-    if(Math.random()<.18) stats.ghosted++;
+  function rejectShot(s,gate){
+    s.alive=false; stats.rejects++; stats.score=Math.max(0,stats.score-8); screenShake=4;
     burst(s.x,s.y,'#ff6878');
-    showToast(Math.random()<.28 ? gate.label : rejectionLines[Math.floor(Math.random()*rejectionLines.length)]);
+    showToast(Math.random()<.35?gate.label:rejectionLines[Math.floor(Math.random()*rejectionLines.length)],700);
+    if(navigator.vibrate) navigator.vibrate(14); updateHud();
+  }
+
+  function interview(s){
+    s.alive=false; stats.interviews++; stats.score+=500+level*120; burst(s.x,s.y,'#c9ff5d',20);
+    const oldLevel=level; level=Math.min(5,1+stats.interviews);
+    showToast(stats.interviews===1?'🎉 INTERVIEW! You made the shortlist.':'🎉 INTERVIEW! Level up.',1000);
+    moveTarget();
+    if(level!==oldLevel){ setupGates(); levelBannerUntil=performance.now()+1500; }
+    else setupGates(true);
+    if(navigator.vibrate) navigator.vibrate([12,18,12]); updateHud();
+  }
+
+  function spawnPickup(){
+    const def=moveDefs[Math.floor(Math.random()*moveDefs.length)];
+    const side=Math.random()<.5?'left':'right';
+    const w=Math.min(176,W*.43),h=52;
+    const x=side==='left'?14:W-w-14;
+    pickups.push({id:++pickupId,x,y:H*.28+Math.random()*H*.42,w,h,def,life:5.4,phase:Math.random()*6.28,collected:false});
+  }
+
+  function collectPickup(p){
+    if(p.collected)return;
+    p.collected=true; stats.moves++; stats.score+=120; human=Math.min(100,human+p.def.value);
+    burst(p.x+p.w/2,p.y+p.h/2,'#55d8ff',14);
+    showToast(`${p.def.icon} ${p.def.label}  +${p.def.value}% human contact`,1100);
+    if(navigator.vibrate)navigator.vibrate(10); updateHud();
+  }
+
+  function burst(x,y,color,count=10){
+    for(let i=0;i<count;i++){const a=Math.random()*Math.PI*2,sp=40+Math.random()*140;particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.55+Math.random()*.35,color,size:2+Math.random()*4});}
+  }
+
+  function updateHud(){
+    timeHud.textContent=Math.max(0,Math.ceil(duration-elapsed)); interviewHud.textContent=stats.interviews; levelHud.textContent=level;
+    levelNameEl.textContent=levelNames[level-1]; levelGoalEl.textContent=levelGoals[level-1];
+    meterFill.style.width=human+'%'; meterPct.textContent=Math.round(human)+'%'; phoneBtn.classList.toggle('ready',human>=100);
+  }
