@@ -1,67 +1,58 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
-  <meta name="theme-color" content="#07101d" />
-  <meta property="og:title" content="The Job Hunt — Can you get the offer?" />
-  <meta property="og:description" content="A 45-second arcade run through the modern job market." />
-  <meta name="twitter:card" content="summary_large_image" />
-  <title>The Job Hunt</title>
-  <link rel="stylesheet" href="dash.css?v=2" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#07101d" />
+<meta property="og:title" content="The Job Hunt — The Signal" />
+<meta property="og:description" content="Build the chain. Reach the opportunity. A 45-second experiment in the modern job market." />
+<title>The Job Hunt — The Signal</title>
+<link rel="stylesheet" href="signal.css?v=1" />
 </head>
 <body>
 <div id="shell">
   <canvas id="game"></canvas>
 
   <div id="start" class="overlay">
-    <div class="eyebrow">45 seconds in the 2026 job market</div>
-    <h1>CAN YOU GET<span>THE OFFER?</span></h1>
-    <div class="sub">Run the hiring gauntlet. <strong>Dodge the friction. Collect the career moves.</strong></div>
+    <div class="eyebrow">THE JOB HUNT · CONCEPT TEST</div>
+    <h1>THE <span>SIGNAL</span></h1>
+    <div class="sub">Build the chain. Reach the opportunity.</div>
     <div class="rules">
-      <div class="rule"><b>👆</b>Tap a lane</div>
-      <div class="rule"><b>🚧</b>Dodge the bad</div>
-      <div class="rule"><b>🤝</b>Collect the good</div>
+      <div class="rule"><b>☝️</b><span>Tap a node</span></div>
+      <div class="rule"><b>〰️</b><span>Trigger a ripple</span></div>
+      <div class="rule"><b>🎯</b><span>Reach a role</span></div>
     </div>
-    <button id="playBtn">START THE JOB HUNT</button>
-    <div class="fine">Application → Screening → Interview → Final → Offer</div>
+    <button id="playBtn">SEND THE FIRST SIGNAL</button>
+    <div class="fine">45 seconds · no tutorial required</div>
   </div>
 
   <div id="hud" class="hidden">
-    <div class="hudRow">
-      <div class="hudCard"><div class="hudLabel">Score</div><div id="scoreHud" class="hudValue">0</div></div>
-      <div class="hudCard smallCard"><div class="hudLabel">Time</div><div id="timeHud" class="hudValue">45</div></div>
-      <div class="hudCard smallCard"><div class="hudLabel">Lives</div><div id="livesHud" class="hudValue">♥♥♥</div></div>
+    <div class="hudTop">
+      <div class="hudCard"><small>TIME</small><b id="timeHud">45</b></div>
+      <div class="hudCard"><small>OFFERS</small><b id="offerHud">0</b></div>
+      <div class="hudCard"><small>BEST CHAIN</small><b id="chainHud">0</b></div>
     </div>
-    <div class="progressWrap">
-      <div class="progressTop"><span id="stageName">APPLICATION</span><span id="nextStage">NEXT: SCREENING</span></div>
-      <div class="track"><div id="progressFill" class="fill"></div></div>
-    </div>
-    <div id="bottomHud">
-      <div class="meter">
-        <div class="meterTop"><span>Network</span><strong id="networkCount">0/3</strong></div>
-        <div class="pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
-      </div>
-      <div id="shieldBadge" class="off">REFERRAL</div>
+    <div id="signalBar">
+      <span>SIGNALS</span>
+      <div id="charges"><i></i><i></i><i></i></div>
+      <small id="signalHint">Tap a glowing node</small>
     </div>
   </div>
 
   <div id="toast"></div>
-  <div id="stageBanner"><small>PROGRESS</small><b>APPLICATION</b></div>
+  <div id="chainToast"></div>
 
   <div id="gameover" class="overlay hidden">
     <div id="resultsCard">
-      <div class="resultTitle">You made it to</div>
-      <div id="madeIt">APPLICATION</div>
-      <div id="bigScore" class="bigScore">0</div>
-      <div class="scoreCaption">points</div>
+      <div class="resultTitle">YOUR NETWORK CREATED</div>
+      <div class="offerResult"><b id="rOffers">0</b><span>OFFERS</span></div>
       <div class="stats">
-        <div class="stat"><span>Obstacles cleared</span><b id="sDodged">0</b></div>
-        <div class="stat"><span>Career moves</span><b id="sMoves">0</b></div>
-        <div class="stat"><span>Referrals earned</span><b id="sReferrals">0</b></div>
-        <div class="stat"><span>Hits taken</span><b id="sHits">0</b></div>
+        <div class="stat"><span>Interviews</span><b id="rInterviews">0</b></div>
+        <div class="stat"><span>Longest chain</span><b id="rChain">0</b></div>
+        <div class="stat"><span>Signals sent</span><b id="rSignals">0</b></div>
+        <div class="stat"><span>Roles discovered</span><b id="rRoles">0</b></div>
       </div>
-      <div id="resultLine" class="resultLine"></div>
+      <div id="resultLine"></div>
       <div class="buttons">
         <button id="againBtn">PLAY AGAIN</button>
         <button id="shareBtn" class="secondary">SHARE SCORE</button>
@@ -69,6 +60,6 @@
     </div>
   </div>
 </div>
-<script src="dash.js?v=2"></script>
+<script src="signal.js?v=1"></script>
 </body>
 </html>
