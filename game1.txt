@@ -1,0 +1,47 @@
+(() => {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const shell = document.getElementById('shell');
+  const start = document.getElementById('start');
+  const hud = document.getElementById('hud');
+  const gameover = document.getElementById('gameover');
+  const toastEl = document.getElementById('toast');
+  const playBtn = document.getElementById('playBtn');
+  const againBtn = document.getElementById('againBtn');
+  const shareBtn = document.getElementById('shareBtn');
+  const phoneBtn = document.getElementById('phoneBtn');
+  const timeHud = document.getElementById('timeHud');
+  const interviewHud = document.getElementById('interviewHud');
+  const scoreHud = document.getElementById('scoreHud');
+  const meterFill = document.getElementById('meterFill');
+  const meterPct = document.getElementById('meterPct');
+
+  const obstacleNames = ['ATS FILTER','500+ APPLICANTS','AI SCREEN','UPLOAD CV AGAIN','ONE-WAY VIDEO','ENTRY LEVEL · 5 YEARS','SALARY: COMPETITIVE'];
+  const rejectionLines = ['Unfortunately…','We’ll keep your CV on file.','Not quite the right fit.','Please upload your CV again.','Application successfully disappeared.','You scored 98%. Cut-off was 99%.'];
+
+  let W=0,H=0,dpr=1, raf=0, last=0, state='start';
+  let startTime=0, elapsed=0, duration=45;
+  let shots=[], particles=[], gates=[], target={x:0,y:0,w:94,h:44};
+  let stats={}, human=0, superUntil=0, screenShake=0, toastTimer=0, difficulty=1;
+  let best = 0;
+  try { best = Number(sessionStorage.getItem('jobhunt-best')||0); } catch(_) {}
+
+  function resetStats(){ stats={apps:0, interviews:0, rejects:0, ghosted:0, reposted:0, calls:0, score:0}; }
+
+  function resize(){
+    const r=shell.getBoundingClientRect(); W=r.width; H=r.height; dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    setupGates(true);
+    target.y=Math.max(95,H*0.13); target.x=Math.max(16,Math.min(W-target.w-16,target.x||W/2-target.w/2));
+  }
+
+  function setupGates(preserve=false){
+    const ys=[H*.34,H*.49,H*.64];
+    gates = ys.map((y,i)=>({
+      y,
+      h:26,
+      gapBase: Math.max(88, W*.25),
+      gap: Math.max(88,W*.25),
+      x: preserve && gates[i] ? gates[i].x : W*(.25+.25*i),
+      phase: preserve && gates[i] ? gates[i].phase : Math.random()*Math.PI*2,
+      speed:.9+i*.17+Math.random()*.12,
