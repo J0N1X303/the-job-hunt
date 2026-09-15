@@ -1,15 +1,8 @@
-
-  function shareText(){return `I reached Level ${level} and landed ${stats.interviews} interview${stats.interviews===1?'':'s'} in The Job Hunt. I also made ${stats.moves} career move${stats.moves===1?'':'s'} outside the application funnel. Score: ${stats.score.toLocaleString()}. Your turn.`;}
-  async function share(){const text=shareText();try{if(navigator.share){await navigator.share({title:'The Job Hunt',text,url:location.href});}else{await navigator.clipboard.writeText(text);showToast('Score copied — paste it into LinkedIn.');}}catch(e){if(e?.name!=='AbortError'){try{await navigator.clipboard.writeText(text);showToast('Score copied.');}catch(_){showToast(text);}}}}
-
-  function loop(now){if(state!=='play')return;const dt=Math.min(.033,(now-last)/1000||0);last=now;update(dt,now);draw(now);if(state==='play')raf=requestAnimationFrame(loop);}
-
-  canvas.addEventListener('pointerdown',e=>{
-    if(state!=='play')return;const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
-    for(let i=pickups.length-1;i>=0;i--){const p=pickups[i];if(pointIn(x,y,{x:p.x,y:p.y,w:p.w,h:p.h})){collectPickup(p);return;}}
-    if(y>H-78)return;
-    fireCV(false);
-  });
-  playBtn.addEventListener('click',startGame);againBtn.addEventListener('click',startGame);shareBtn.addEventListener('click',share);phoneBtn.addEventListener('click',e=>{e.stopPropagation();useHuman();});
-  window.addEventListener('resize',resize);resize();draw(performance.now());
+function endGame(){if(state!=='play')return;state='over';cancelAnimationFrame(raf);hud.classList.add('hidden');gameover.classList.remove('hidden');stats.score=Math.round(stats.score+stats.interviews*90+stats.moves*60+stats.bestStreak*100);best=Math.max(best,stats.score);try{localStorage.setItem('jobhunt-best-v3',best)}catch(_){}document.getElementById('bigScore').textContent=stats.score.toLocaleString();document.getElementById('sApps').textContent=stats.apps;document.getElementById('sInts').textContent=stats.interviews;document.getElementById('sRejects').textContent=stats.rejects;document.getElementById('sMoves').textContent=stats.moves;document.getElementById('sCalls').textContent=stats.calls;document.getElementById('sLevel').textContent=stats.maxLevel;const next=stats.maxLevel>=6?'You made the hiring process look almost reasonable.':stats.maxLevel>=4?'Good run. Can you get one level further?':'You got into the process. Now beat your level.';document.getElementById('resultLine').textContent=`${next} Best score: ${best.toLocaleString()}.`}
+function shareText(){return `I reached Level ${stats.maxLevel}, landed ${stats.interviews} interviews and made ${stats.moves} career moves in The Job Hunt. Score: ${stats.score.toLocaleString()}. Your turn.`}
+async function share(){const text=shareText();try{if(navigator.share)await navigator.share({title:'The Job Hunt',text,url:location.href});else{await navigator.clipboard.writeText(text+' '+location.href);showToast('Score copied — paste into LinkedIn.')}}catch(e){if(e?.name!=='AbortError')showToast('Share cancelled.')}}
+function loop(now){if(state!=='play')return;const dt=Math.min(.033,(now-last)/1000||0);last=now;update(dt,now);draw(now);if(state==='play')raf=requestAnimationFrame(loop)}
+function pointerX(e){const r=canvas.getBoundingClientRect();return Math.max(20,Math.min(W-20,e.clientX-r.left))}
+canvas.addEventListener('pointerdown',e=>{if(state!=='play')return;dragging=true;controlX=pointerX(e);try{canvas.setPointerCapture(e.pointerId)}catch(_){}});canvas.addEventListener('pointermove',e=>{if(state==='play'&&dragging)controlX=pointerX(e)});canvas.addEventListener('pointerup',()=>dragging=false);canvas.addEventListener('pointercancel',()=>dragging=false);
+playBtn.addEventListener('click',startGame);againBtn.addEventListener('click',startGame);shareBtn.addEventListener('click',share);phoneBtn.addEventListener('click',e=>{e.stopPropagation();useHuman()});window.addEventListener('resize',resize);resize();draw(performance.now());
 })();
