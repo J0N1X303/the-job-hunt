@@ -1,50 +1,6 @@
-
-  function drawLauncher(now){
-    const x=W/2,y=H-112;roundRect(x-36,y-25,72,50,14,'#101c2f','rgba(255,255,255,.12)');
-    ctx.fillStyle='#f7f9fc';ctx.font='900 25px system-ui';ctx.textAlign='center';ctx.fillText('📄',x,y+8);ctx.fillStyle='#6f7f98';ctx.font='800 9px system-ui';ctx.fillText('YOUR CV',x,y+38);
-    if(!firstShot){
-      const a=.55+.35*Math.sin(now/180);ctx.globalAlpha=a;ctx.strokeStyle='#55d8ff';ctx.lineWidth=2;ctx.setLineDash([6,7]);
-      ctx.beginPath();ctx.moveTo(x,y-30);ctx.lineTo(target.x+target.w/2,target.y+target.h+10);ctx.stroke();ctx.setLineDash([]);
-      ctx.fillStyle='#55d8ff';ctx.font='900 13px system-ui';ctx.fillText('TAP ANYWHERE TO SEND CV',W/2,H-175);ctx.globalAlpha=1;
-    }
-  }
-
-  function drawPickups(now){
-    pickups.forEach(p=>{
-      const bob=Math.sin(now/260+p.phase)*3;const x=p.x,y=p.y+bob;
-      ctx.save();ctx.shadowColor='rgba(85,216,255,.35)';ctx.shadowBlur=14;roundRect(x,y,p.w,p.h,14,'rgba(12,37,47,.95)','rgba(85,216,255,.45)');ctx.restore();
-      ctx.textAlign='left';ctx.fillStyle='#f7f9fc';ctx.font='900 16px system-ui';ctx.fillText(p.def.icon,x+10,y+22);
-      ctx.font='800 10px system-ui';ctx.fillStyle='#cfefff';ctx.fillText(p.def.label,x+38,y+20);
-      ctx.font='800 9px system-ui';ctx.fillStyle='#55d8ff';ctx.fillText('TAP TO COLLECT',x+38,y+38);
-    });
-  }
-
-  function drawShots(){
-    shots.forEach(s=>{ctx.save();s.trail.forEach((p,i)=>{ctx.globalAlpha=(i+1)/s.trail.length*.18;roundRect(p.x-10,p.y-6,20,12,3,'#55d8ff');});ctx.globalAlpha=1;
-      ctx.translate(s.x,s.y);ctx.rotate(Math.atan2(s.vy,s.vx)+Math.PI/2);roundRect(-14,-9,28,18,4,s.auto?'#c9ff5d':'#f4f7fb');ctx.fillStyle='#102033';ctx.fillRect(-9,-4,14,2);ctx.fillRect(-9,1,10,2);ctx.restore();});
-  }
-
-  function drawParticles(){particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;});}
-
-  function drawSuper(now){
-    const a=.5+.25*Math.sin(now/80);ctx.strokeStyle=`rgba(201,255,93,${a})`;ctx.lineWidth=4;ctx.strokeRect(3,3,W-6,H-6);
-    ctx.fillStyle='rgba(201,255,93,.96)';ctx.font='900 13px system-ui';ctx.textAlign='center';ctx.fillText('☎️ WARM INTRO — BARRIERS OPEN',W/2,H*.25);
-  }
-
-  function drawLevelBanner(now){
-    const remaining=Math.max(0,levelBannerUntil-now);const alpha=Math.min(1,remaining/350,(1500-remaining)/250);ctx.globalAlpha=Math.max(0,alpha);
-    roundRect(W*.12,H*.22,W*.76,76,18,'rgba(8,16,29,.92)','rgba(201,255,93,.25)');ctx.textAlign='center';ctx.fillStyle='#c9ff5d';ctx.font='900 12px system-ui';ctx.fillText(`LEVEL ${level}`,W/2,H*.22+25);
-    ctx.fillStyle='#f7f9fc';ctx.font='900 19px system-ui';ctx.fillText(levelNames[level-1],W/2,H*.22+50);ctx.globalAlpha=1;
-  }
-
-  function endGame(){
-    if(state!=='play')return;state='over';cancelAnimationFrame(raf);hud.classList.add('hidden');gameover.classList.remove('hidden');
-    stats.score=Math.round(stats.score+stats.interviews*110+stats.calls*180+stats.moves*60);
-    bestScore=Math.max(bestScore,stats.score);bestInterviews=Math.max(bestInterviews,stats.interviews);bestLevel=Math.max(bestLevel,level);
-    try{localStorage.setItem('jobhunt-best-score',bestScore);localStorage.setItem('jobhunt-best-interviews',bestInterviews);localStorage.setItem('jobhunt-best-level',bestLevel);}catch(_){}
-    document.getElementById('bigScore').textContent=stats.score.toLocaleString();
-    document.getElementById('sApps').textContent=stats.apps;document.getElementById('sInts').textContent=stats.interviews;document.getElementById('sRejects').textContent=stats.rejects;
-    document.getElementById('sMoves').textContent=stats.moves;document.getElementById('sCalls').textContent=stats.calls;document.getElementById('sLevel').textContent=level;
-    const result=stats.interviews>=4?'You made it through the hiring committee. Suspiciously competent.':stats.interviews>=2?'You reached the shortlist. Now try to beat it.':stats.interviews>=1?'You got the interview. Next run: go further.':'The ATS wins this round. The network might have ideas.';
-    document.getElementById('resultLine').textContent=`${result} Best: ${bestInterviews} interviews · Level ${bestLevel}.`;
-  }
+function drawGates(now){const superActive=now<superUntil;gates.forEach(g=>{const l=g.x-g.gap/2,r=g.x+g.gap/2;ctx.globalAlpha=superActive?.18:1;roundRect(0,g.y-g.h/2,Math.max(0,l),g.h,8,'#26344a');roundRect(r,g.y-g.h/2,Math.max(0,W-r),g.h,8,'#26344a');ctx.fillStyle=superActive?'#c9ff5d':'#ffc85c';ctx.font='900 10px system-ui';ctx.textAlign='left';ctx.fillText(g.label,10,g.y-18);ctx.strokeStyle=superActive?'rgba(201,255,93,.7)':'rgba(85,216,255,.34)';ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(l,g.y);ctx.lineTo(r,g.y);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1})}
+function drawCV(){if(!cv||!cv.alive)return;ctx.save();ctx.translate(cv.x,cv.y);const rot=(controlX-cv.x)*.008;ctx.rotate(rot);roundRect(-15,-10,30,20,4,performance.now()<superUntil?'#c9ff5d':'#f5f7fb');ctx.fillStyle='#102033';ctx.fillRect(-9,-4,16,2);ctx.fillRect(-9,1,11,2);ctx.restore();if(cv.hits>0){ctx.textAlign='center';ctx.fillStyle='#ffc85c';ctx.font='800 9px system-ui';ctx.fillText(`${3-cv.hits} BOUNCE${3-cv.hits===1?'':'S'} LEFT`,cv.x,cv.y+27)}}
+function drawPickups(now){pickups.forEach(p=>{const pulse=1+.06*Math.sin(now/220+p.pulse);ctx.save();ctx.translate(p.x,p.y);ctx.scale(pulse,pulse);ctx.beginPath();ctx.arc(0,0,p.r,0,Math.PI*2);ctx.fillStyle='rgba(201,255,93,.13)';ctx.fill();ctx.strokeStyle='rgba(201,255,93,.9)';ctx.lineWidth=2;ctx.stroke();ctx.textAlign='center';ctx.fillStyle='#f7f9fc';ctx.font='18px system-ui';ctx.fillText(p.m.icon,0,3);ctx.fillStyle='#c9ff5d';ctx.font='900 8px system-ui';ctx.fillText(p.m.short,0,17);ctx.restore()})}
+function drawParticles(){particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1})}
+function drawHint(){if(state!=='play'||elapsed>4||stats.interviews>0)return;ctx.textAlign='center';ctx.fillStyle='rgba(247,249,252,.88)';ctx.font='900 13px system-ui';ctx.fillText('← DRAG TO STEER →',W/2,H-158);ctx.fillStyle='rgba(158,172,196,.9)';ctx.font='700 10px system-ui';ctx.fillText('Hit a barrier? Your CV bounces back.',W/2,H-140)}
+function draw(now){ctx.clearRect(0,0,W,H);drawBackdrop();if(state==='play'){drawTarget();drawGates(now);drawPickups(now);drawCV();drawParticles();drawHint();if(now<superUntil){ctx.strokeStyle='rgba(201,255,93,.85)';ctx.lineWidth=4;ctx.strokeRect(3,3,W-6,H-6)}}}
