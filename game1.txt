@@ -12,36 +12,65 @@
   const phoneBtn = document.getElementById('phoneBtn');
   const timeHud = document.getElementById('timeHud');
   const interviewHud = document.getElementById('interviewHud');
-  const scoreHud = document.getElementById('scoreHud');
+  const levelHud = document.getElementById('levelHud');
+  const levelNameEl = document.getElementById('levelName');
+  const levelGoalEl = document.getElementById('levelGoal');
   const meterFill = document.getElementById('meterFill');
   const meterPct = document.getElementById('meterPct');
 
+  const levelNames = ['STARTING OUT','ATS MAZE','SHORTLIST','FINAL ROUND','HIRING COMMITTEE'];
+  const levelGoals = [
+    'Land your first interview',
+    'Two filters. Time the gap.',
+    'Three filters. Keep your nerve.',
+    'The process is speeding up.',
+    'Welcome to the hiring committee.'
+  ];
   const obstacleNames = ['ATS FILTER','500+ APPLICANTS','AI SCREEN','UPLOAD CV AGAIN','ONE-WAY VIDEO','ENTRY LEVEL · 5 YEARS','SALARY: COMPETITIVE'];
-  const rejectionLines = ['Unfortunately…','We’ll keep your CV on file.','Not quite the right fit.','Please upload your CV again.','Application successfully disappeared.','You scored 98%. Cut-off was 99%.'];
+  const rejectionLines = ['Unfortunately…','We’ll keep your CV on file.','Not quite the right fit.','Application successfully disappeared.','You scored 98%. Cut-off was 99%.'];
+  const moveDefs = [
+    {icon:'🤝',label:'Reached out to network',value:34},
+    {icon:'☕',label:'Coffee chat',value:30},
+    {icon:'🎟️',label:'Industry event',value:38},
+    {icon:'🧑‍💼',label:'Spoke with a recruiter',value:34},
+    {icon:'🔗',label:'Asked for an intro',value:40}
+  ];
 
   let W=0,H=0,dpr=1, raf=0, last=0, state='start';
   let startTime=0, elapsed=0, duration=45;
-  let shots=[], particles=[], gates=[], target={x:0,y:0,w:94,h:44};
-  let stats={}, human=0, superUntil=0, screenShake=0, toastTimer=0, difficulty=1;
-  let best = 0;
-  try { best = Number(sessionStorage.getItem('jobhunt-best')||0); } catch(_) {}
+  let shots=[], particles=[], gates=[], pickups=[], target={x:0,y:0,w:110,h:50};
+  let stats={}, human=0, superUntil=0, screenShake=0, toastTimer=0;
+  let level=1, firstShot=false, nextPickupAt=4, pickupId=0, levelBannerUntil=0;
+  let bestScore=0,bestInterviews=0,bestLevel=1;
+  try {
+    bestScore = Number(localStorage.getItem('jobhunt-best-score')||0);
+    bestInterviews = Number(localStorage.getItem('jobhunt-best-interviews')||0);
+    bestLevel = Number(localStorage.getItem('jobhunt-best-level')||1);
+  } catch(_) {}
 
-  function resetStats(){ stats={apps:0, interviews:0, rejects:0, ghosted:0, reposted:0, calls:0, score:0}; }
+  function resetStats(){ stats={apps:0,interviews:0,rejects:0,moves:0,calls:0,score:0}; }
 
   function resize(){
     const r=shell.getBoundingClientRect(); W=r.width; H=r.height; dpr=Math.min(window.devicePixelRatio||1,2);
     canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr); ctx.setTransform(dpr,0,0,dpr,0,0);
+    target.y=Math.max(102,H*.13); target.x=Math.max(20,Math.min(W-target.w-20,target.x||W/2-target.w/2));
     setupGates(true);
-    target.y=Math.max(95,H*0.13); target.x=Math.max(16,Math.min(W-target.w-16,target.x||W/2-target.w/2));
   }
 
+  function gateCountForLevel(){ return Math.min(3,level); }
   function setupGates(preserve=false){
-    const ys=[H*.34,H*.49,H*.64];
-    gates = ys.map((y,i)=>({
-      y,
-      h:26,
-      gapBase: Math.max(88, W*.25),
-      gap: Math.max(88,W*.25),
-      x: preserve && gates[i] ? gates[i].x : W*(.25+.25*i),
-      phase: preserve && gates[i] ? gates[i].phase : Math.random()*Math.PI*2,
-      speed:.9+i*.17+Math.random()*.12,
+    const count=gateCountForLevel();
+    const ySets = count===1 ? [H*.50] : count===2 ? [H*.43,H*.61] : [H*.36,H*.51,H*.66];
+    const old=gates;
+    gates=ySets.map((y,i)=>{
+      const prior=preserve?old[i]:null;
+      const baseGap = Math.max(116, W*(level===1?.43:level===2?.36:level===3?.32:.29));
+      return {
+        y,h:26,gapBase:baseGap,gap:baseGap,
+        x:prior?.x ?? W/2,
+        phase:prior?.phase ?? (i*.28),
+        speed:(.56+i*.08) * (1+(level-1)*.12),
+        label:obstacleNames[(i+level-1)%obstacleNames.length]
+      };
+    });
+  }
