@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
   <meta name="theme-color" content="#09111f" />
   <meta property="og:title" content="The Job Hunt — Get. The. Interview." />
-  <meta property="og:description" content="A 45-second arcade game about surviving the modern job market." />
+  <meta property="og:description" content="Steer your CV through the modern job market. Bounce, network and get the interview." />
   <meta name="twitter:card" content="summary_large_image" />
   <title>The Job Hunt</title>
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
 </head>
 <body>
 <div id="shell">
@@ -17,11 +17,11 @@
   <div id="start" class="overlay">
     <div class="eyebrow">45 seconds in the 2026 job market</div>
     <h1>GET. THE.<span>INTERVIEW.</span></h1>
-    <div class="sub">Time your applications through the hiring process. <strong>Every interview levels up the hunt.</strong></div>
+    <div class="sub">Steer your CV through the hiring process. <strong>Miss a gap and it bounces back. Keep it alive.</strong></div>
     <div class="miniRules">
-      <div class="rule"><b>🎯</b>Tap anywhere to send your CV</div>
-      <div class="rule"><b>🚧</b>Time the moving gap and land interviews</div>
-      <div class="rule"><b>🤝</b>Tap career moves to build human contact</div>
+      <div class="rule"><b>↔️</b>Drag to steer</div>
+      <div class="rule"><b>↩️</b>Bounce and retry</div>
+      <div class="rule"><b>🤝</b>Collect career moves</div>
     </div>
     <button id="playBtn">START THE JOB HUNT</button>
     <div class="fine">No CVs were harmed in the making of this game.</div>
@@ -33,7 +33,7 @@
       <div class="hudCard"><div class="hudLabel">Interviews</div><div id="interviewHud" class="hudValue">0</div></div>
       <div class="hudCard"><div class="hudLabel">Level</div><div id="levelHud" class="hudValue">1</div></div>
     </div>
-    <div id="levelStrip"><span id="levelName">STARTING OUT</span><span id="levelGoal">Land your first interview</span></div>
+    <div id="levelStrip"><span id="levelName">FIRST APPLICATION</span><span id="levelGoal">Steer through 1 filter</span></div>
     <div id="humanWrap">
       <div id="meterPanel">
         <div id="meterTitle"><span>Human contact</span><span id="meterPct">0%</span></div>
@@ -65,6 +65,6 @@
     </div>
   </div>
 </div>
-<script src="loader.js?v=2"></script>
+<script src="loader.js?v=3"></script>
 </body>
 </html>
