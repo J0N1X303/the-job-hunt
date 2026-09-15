@@ -1,47 +1,76 @@
-    if(navigator.vibrate) navigator.vibrate(18); updateHud();
-  }
 
-  function interview(s){
-    s.alive=false; stats.interviews++; stats.score+=520+Math.round((duration-elapsed)*4); human=Math.min(100,human+34); burst(s.x,s.y,'#c9ff5d',18);
-    showToast('🎉 INTERVIEW!');
-    if(Math.random()<.22){ stats.reposted++; showToast('🔁 Great! The role has also been reposted.'); }
-    moveTarget(); gates.forEach((g,i)=>g.label=obstacleNames[(Math.floor(Math.random()*obstacleNames.length)+i)%obstacleNames.length]);
-    if(navigator.vibrate) navigator.vibrate([12,20,12]); updateHud();
-  }
-
-  function burst(x,y,color,count=10){
-    for(let i=0;i<count;i++){ const a=Math.random()*Math.PI*2, sp=40+Math.random()*130; particles.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:.55+Math.random()*.35,color,size:2+Math.random()*4}); }
-  }
-
-  function updateHud(){
-    const left=Math.max(0,Math.ceil(duration-elapsed)); timeHud.textContent=left; interviewHud.textContent=stats.interviews; scoreHud.textContent=Math.round(stats.score).toLocaleString();
-    meterFill.style.width=human+'%'; meterPct.textContent=Math.round(human)+'%'; phoneBtn.classList.toggle('ready',human>=100);
-  }
-
-  function rectHit(a,b){ return a.x+a.w/2>b.x && a.x-a.w/2<b.x+b.w && a.y+a.h/2>b.y && a.y-a.h/2<b.y+b.h; }
+  function rectHit(a,b){return a.x+a.w/2>b.x&&a.x-a.w/2<b.x+b.w&&a.y+a.h/2>b.y&&a.y-a.h/2<b.y+b.h;}
+  function pointIn(px,py,r){return px>=r.x&&px<=r.x+r.w&&py>=r.y&&py<=r.y+r.h;}
 
   function update(dt,now){
-    elapsed=(now-startTime)/1000; difficulty=1+elapsed/26;
+    elapsed=(now-startTime)/1000;
     const superActive=now<superUntil;
     gates.forEach((g,i)=>{
-      g.gap=Math.max(70,g.gapBase-(difficulty-1)*20);
-      g.x=W/2 + Math.sin(now/1000*g.speed*difficulty+g.phase)*(W/2-g.gap/2-14);
+      const difficulty=Math.max(0,level-1);
+      g.gap=Math.max(88,g.gapBase-difficulty*4);
+      const amplitude=Math.max(8,W/2-g.gap/2-18);
+      const corridor=W/2+Math.sin(now/1000*g.speed+g.phase)*amplitude;
+      g.x=Math.max(g.gap/2+12,Math.min(W-g.gap/2-12,corridor));
     });
+
     shots.forEach(s=>{
-      s.trail.push({x:s.x,y:s.y}); if(s.trail.length>5)s.trail.shift();
-      s.x+=s.vx*dt; s.y+=s.vy*dt;
-      if(!superActive && !s.auto){
+      s.trail.push({x:s.x,y:s.y});if(s.trail.length>5)s.trail.shift();
+      s.x+=s.vx*dt;s.y+=s.vy*dt;
+      if(!superActive&&!s.auto){
         for(const g of gates){
-          const top=g.y-g.h/2, leftGap=g.x-g.gap/2, rightGap=g.x+g.gap/2;
-          const yHit=s.y-s.h/2<g.y+g.h/2 && s.y+s.h/2>top;
-          const inGap=s.x-s.w/2>leftGap && s.x+s.w/2<rightGap;
-          if(yHit && !inGap){ rejectShot(s,g); break; }
+          const left=g.x-g.gap/2,right=g.x+g.gap/2;
+          const yHit=s.y-s.h/2<g.y+g.h/2&&s.y+s.h/2>g.y-g.h/2;
+          const inGap=s.x-s.w/2>left&&s.x+s.w/2<right;
+          if(yHit&&!inGap){rejectShot(s,g);break;}
         }
       }
-      if(s.alive && rectHit(s,target)) interview(s);
-      if(s.y<-40 || s.x<-50 || s.x>W+50) s.alive=false;
+      if(s.alive&&rectHit(s,target))interview(s);
+      if(s.y<-50||s.x<-60||s.x>W+60)s.alive=false;
     });
     shots=shots.filter(s=>s.alive);
-    particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=120*dt;p.life-=dt;}); particles=particles.filter(p=>p.life>0);
-    stats.score += dt*5;
-    if(screenShake>0) screenShake=Math.max(0,screenShake-24*dt);
+
+    if(elapsed>=nextPickupAt){spawnPickup();nextPickupAt+=5.5+Math.random()*2.2;}
+    pickups.forEach(p=>{p.life-=dt;p.y+=Math.sin(now/550+p.phase)*4*dt;});
+    pickups=pickups.filter(p=>p.life>0&&!p.collected);
+
+    particles.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=120*dt;p.life-=dt;});particles=particles.filter(p=>p.life>0);
+    stats.score+=dt*(3+level);
+    if(screenShake>0)screenShake=Math.max(0,screenShake-24*dt);
+    updateHud();
+    if(elapsed>=duration)endGame();
+  }
+
+  function roundRect(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.stroke();}}
+
+  function draw(now){
+    ctx.clearRect(0,0,W,H);ctx.save();if(screenShake)ctx.translate((Math.random()-.5)*screenShake,(Math.random()-.5)*screenShake);
+    drawBackdrop();
+    if(state==='play'){drawTarget(now);drawGates(now);drawPickups(now);drawLauncher(now);drawShots();drawParticles();if(now<superUntil)drawSuper(now);if(now<levelBannerUntil)drawLevelBanner(now);}
+    ctx.restore();
+  }
+
+  function drawBackdrop(){
+    ctx.save();ctx.globalAlpha=.5;ctx.strokeStyle='rgba(255,255,255,.035)';ctx.lineWidth=1;const step=38;
+    for(let x=0;x<W;x+=step){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+    for(let y=0;y<H;y+=step){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}ctx.restore();
+  }
+
+  function drawTarget(now){
+    const pulse=.35+.18*Math.sin(now/170);
+    ctx.save();ctx.shadowColor=`rgba(85,216,255,${pulse})`;ctx.shadowBlur=18;
+    roundRect(target.x,target.y,target.w,target.h,14,'#12243a','rgba(85,216,255,.55)');ctx.restore();
+    ctx.fillStyle='#55d8ff';ctx.font='800 10px system-ui';ctx.textAlign='center';ctx.fillText('HIRING MANAGER',target.x+target.w/2,target.y+18);
+    ctx.fillStyle='#f7f9fc';ctx.font='900 16px system-ui';ctx.fillText('INTERVIEW',target.x+target.w/2,target.y+38);
+  }
+
+  function drawGates(now){
+    const superActive=now<superUntil;
+    gates.forEach(g=>{
+      const l=g.x-g.gap/2,r=g.x+g.gap/2;ctx.globalAlpha=superActive?.18:1;
+      const grad=ctx.createLinearGradient(0,g.y,W,g.y);grad.addColorStop(0,'#26344a');grad.addColorStop(1,'#1b2639');
+      roundRect(0,g.y-g.h/2,Math.max(0,l),g.h,8,grad);roundRect(r,g.y-g.h/2,Math.max(0,W-r),g.h,8,grad);
+      ctx.fillStyle=superActive?'rgba(201,255,93,.8)':'#ffb85c';ctx.font='800 9px system-ui';ctx.textAlign='left';
+      ctx.fillText(g.label,Math.min(W-125,Math.max(8,l>150?8:r+8)),g.y-18);
+      ctx.strokeStyle=superActive?'rgba(201,255,93,.75)':'rgba(255,200,92,.55)';ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(l,g.y);ctx.lineTo(r,g.y);ctx.stroke();ctx.setLineDash([]);ctx.globalAlpha=1;
+    });
+  }
