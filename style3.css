@@ -3,8 +3,11 @@
     #phoneBtn { pointer-events:auto; width:64px; height:64px; flex:0 0 64px; padding:0; border-radius:20px; font-size:28px; display:flex; align-items:center; justify-content:center; opacity:.36; transform:scale(.96); transition:.18s ease; }
     #phoneBtn.ready { opacity:1; transform:scale(1); animation:pulse 1s infinite alternate; }
     @keyframes pulse { to { box-shadow:0 0 0 8px rgba(201,255,93,.08),0 12px 34px rgba(201,255,93,.22);} }
-    #toast { position:absolute; left:50%; top:22%; transform:translate(-50%,-8px); opacity:0; pointer-events:none; max-width:82%; padding:10px 14px; border-radius:14px; background:rgba(8,16,29,.9); border:1px solid rgba(255,255,255,.1); color:var(--text); font-size:14px; font-weight:850; text-align:center; transition:.18s ease; box-shadow:0 12px 32px rgba(0,0,0,.22); }
+    #toast { position:absolute; left:50%; top:22%; transform:translate(-50%,-8px); opacity:0; pointer-events:none; max-width:86%; padding:10px 14px; border-radius:14px; background:rgba(8,16,29,.92); border:1px solid rgba(255,255,255,.1); color:var(--text); font-size:14px; font-weight:850; text-align:center; transition:.18s ease; box-shadow:0 12px 32px rgba(0,0,0,.22); z-index:5; }
     #toast.show { opacity:1; transform:translate(-50%,0); }
+    #levelStrip { margin-top:8px; display:flex; justify-content:space-between; align-items:center; gap:10px; border:1px solid rgba(201,255,93,.12); background:rgba(8,16,29,.58); border-radius:12px; padding:7px 10px; font-size:9px; text-transform:uppercase; letter-spacing:.08em; font-weight:850; color:#8190a7; }
+    #levelName { color:var(--lime); white-space:nowrap; }
+    #levelGoal { text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     #resultsCard { width:min(100%,390px); border:1px solid rgba(255,255,255,.09); border-radius:26px; background:linear-gradient(180deg,rgba(19,32,54,.95),rgba(10,18,31,.96)); box-shadow:0 28px 70px rgba(0,0,0,.36); padding:22px; }
     .resultTitle { font-size:13px; color:var(--cyan); font-weight:850; letter-spacing:.14em; text-transform:uppercase; }
     .bigScore { font-size:58px; line-height:1; letter-spacing:-.05em; font-weight:950; margin:8px 0 2px; color:var(--lime); }
