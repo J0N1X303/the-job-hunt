@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
-  <meta name="theme-color" content="#09111f" />
-  <meta property="og:title" content="The Job Hunt — Get. The. Interview." />
-  <meta property="og:description" content="Steer your CV through the modern job market. Bounce, network and get the interview." />
+  <meta name="theme-color" content="#07101d" />
+  <meta property="og:title" content="The Job Hunt — Can you get the offer?" />
+  <meta property="og:description" content="A 45-second arcade run through the modern job market." />
   <meta name="twitter:card" content="summary_large_image" />
   <title>The Job Hunt</title>
-  <link rel="stylesheet" href="styles.css?v=3" />
+  <link rel="stylesheet" href="dash.css?v=1" />
 </head>
 <body>
 <div id="shell">
@@ -16,55 +16,59 @@
 
   <div id="start" class="overlay">
     <div class="eyebrow">45 seconds in the 2026 job market</div>
-    <h1>GET. THE.<span>INTERVIEW.</span></h1>
-    <div class="sub">Steer your CV through the hiring process. <strong>Miss a gap and it bounces back. Keep it alive.</strong></div>
-    <div class="miniRules">
-      <div class="rule"><b>↔️</b>Drag to steer</div>
-      <div class="rule"><b>↩️</b>Bounce and retry</div>
+    <h1>GET. THE.<span>OFFER.</span></h1>
+    <div class="sub">Run the hiring gauntlet. <strong>Dodge the friction, collect the moves that actually help, and see how far you get.</strong></div>
+    <div class="rules">
+      <div class="rule"><b>👆</b>Tap a lane</div>
+      <div class="rule"><b>🚧</b>Dodge the blockers</div>
       <div class="rule"><b>🤝</b>Collect career moves</div>
     </div>
     <button id="playBtn">START THE JOB HUNT</button>
-    <div class="fine">No CVs were harmed in the making of this game.</div>
+    <div class="fine">Application → Screening → Interview → Final → Offer</div>
   </div>
 
   <div id="hud" class="hidden">
-    <div class="hudTop">
-      <div class="hudCard"><div class="hudLabel">Time</div><div id="timeHud" class="hudValue">45</div></div>
-      <div class="hudCard"><div class="hudLabel">Interviews</div><div id="interviewHud" class="hudValue">0</div></div>
-      <div class="hudCard"><div class="hudLabel">Level</div><div id="levelHud" class="hudValue">1</div></div>
+    <div class="hudRow">
+      <div class="hudCard"><div class="hudLabel">Stage</div><div id="stageName" class="hudValue">APPLICATION</div></div>
+      <div class="hudCard smallCard"><div class="hudLabel">Score</div><div id="scoreHud" class="hudValue">0</div></div>
+      <div class="hudCard smallCard"><div class="hudLabel">Lives</div><div id="livesHud" class="hudValue">♥♥♥</div></div>
     </div>
-    <div id="levelStrip"><span id="levelName">FIRST APPLICATION</span><span id="levelGoal">Steer through 1 filter</span></div>
-    <div id="humanWrap">
-      <div id="meterPanel">
-        <div id="meterTitle"><span>Human contact</span><span id="meterPct">0%</span></div>
-        <div id="meterTrack"><div id="meterFill"></div></div>
+    <div class="progressWrap">
+      <div class="progressTop"><span id="nextStage">NEXT: SCREENING</span><span><b id="timeHud">45</b>s</span></div>
+      <div class="track"><div id="progressFill" class="fill"></div></div>
+    </div>
+    <div id="bottomHud">
+      <div class="meter">
+        <div class="meterTop"><span>Human contact</span><strong id="networkCount">0/3</strong></div>
+        <div class="pips"><i class="pip"></i><i class="pip"></i><i class="pip"></i></div>
       </div>
-      <button id="phoneBtn" aria-label="Use warm introduction">☎️</button>
+      <div id="shieldBadge" class="off">REFERRAL</div>
     </div>
   </div>
+
   <div id="toast"></div>
+  <div id="stageBanner"><small>PROGRESS</small><b>SCREENING</b></div>
 
   <div id="gameover" class="overlay hidden">
     <div id="resultsCard">
-      <div class="resultTitle">Job Market Survival Score</div>
+      <div class="resultTitle">You made it to</div>
+      <div id="madeIt">INTERVIEW</div>
       <div id="bigScore" class="bigScore">0</div>
       <div class="scoreCaption">points</div>
       <div class="stats">
-        <div class="stat"><span>Applications</span><b id="sApps">0</b></div>
-        <div class="stat"><span>Interviews</span><b id="sInts">0</b></div>
-        <div class="stat"><span>Process rejections</span><b id="sRejects">0</b></div>
+        <div class="stat"><span>Rows dodged</span><b id="sDodged">0</b></div>
         <div class="stat"><span>Career moves</span><b id="sMoves">0</b></div>
-        <div class="stat"><span>Warm intros</span><b id="sCalls">0</b></div>
-        <div class="stat"><span>Level reached</span><b id="sLevel">1</b></div>
+        <div class="stat"><span>Referrals</span><b id="sReferrals">0</b></div>
+        <div class="stat"><span>Hits taken</span><b id="sHits">0</b></div>
       </div>
-      <div id="resultLine"></div>
-      <div class="buttonRow">
+      <div id="resultLine" class="resultLine"></div>
+      <div class="buttons">
         <button id="againBtn">PLAY AGAIN</button>
-        <button id="shareBtn" class="secondary">SHARE SCORE</button>
+        <button id="shareBtn" class="secondary">SHARE</button>
       </div>
     </div>
   </div>
 </div>
-<script src="loader.js?v=3"></script>
+<script src="dash.js?v=1"></script>
 </body>
 </html>
