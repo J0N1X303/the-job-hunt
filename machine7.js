@@ -5,7 +5,7 @@
   const interviewsEl=$('interviewsHud'),timeEl=$('timeHud'),comboEl=$('comboHud'),focusEl=$('focusFill'),focusLabel=$('focusLabel'),motivationEl=$('motivationFill'),motivationLabel=$('motivationLabel');
   const toast=$('toast'),bigToast=$('bigToast');
 
-  let W=0,H=0,dpr=1,state='start',raf=0,last=0,startAt=0,elapsed=0,duration=45;
+  let W=0,H=0,dpr=1,state='start',raf=0,last=0,startAt=0,elapsed=0,duration=60;
   let aimX=0,lastAimX=0,aimVelocity=0,steady=0,shotClock=0,interviews=0,sent=0,combo=0,bestCombo=0,seq=0,idleTime=0,motivation=74;
   let cvs=[],obstacles=[],powerups=[],particles=[],floaters=[];
   let introUntil=0,recruiterUntil=0,recruiterGateId=0,recruiterGapX=0,boostUntil=0,nextPowerAt=0,nextChaosAt=0,toastT=0,bigT=0;
@@ -19,7 +19,7 @@
   const pick=a=>a[Math.random()*a.length|0];
   const blockers=['ATS','NO RESPONSE','GENERIC REJECTION','AI SCREEN','500+','UPLOAD CV AGAIN'];
 
-  function phase(){return elapsed<10?0:elapsed<25?1:elapsed<38?2:3}
+  function phase(){return elapsed<12?0:elapsed<32?1:elapsed<50?2:3}
   function resize(){
     const r=shell.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(devicePixelRatio||1,2);
     canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
@@ -256,7 +256,7 @@
   function pointerMove(e){if(state!=='play'||!(e.buttons||e.pointerType==='touch'))return;e.preventDefault();moveAim(e.clientX)}
   function pointerUp(e){if(state!=='play')return;e.preventDefault();moveAim(e.clientX)}
   function nudge(dx){if(state!=='play')return;aimX=clamp(aimX+dx,22,W-22)}
-  async function share(){const text=`I got ${interviews} interviews from ${sent} CVs in 45 seconds of CV Chaos and finished on ${Math.round(motivation)}% motivation.`;try{if(navigator.share)await navigator.share({title:'CV Chaos — The Job Hunt',text,url:location.href.split('?')[0]})}catch(_){}
+  async function share(){const text=`I got ${interviews} interviews from ${sent} CVs in 60 seconds of CV Chaos and finished on ${Math.round(motivation)}% motivation.`;try{if(navigator.share)await navigator.share({title:'CV Chaos — The Job Hunt',text,url:location.href.split('?')[0]})}catch(_){}
   }
   function loop(now){if(state!=='play')return;const dt=Math.min(.033,(now-last)/1000||0);last=now;update(dt,now);draw(now);if(state==='play')raf=requestAnimationFrame(loop)}
 
