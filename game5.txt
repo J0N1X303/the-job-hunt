@@ -1,0 +1,45 @@
+  }
+
+  function drawShots(){
+    shots.forEach(s=>{
+      ctx.save(); s.trail.forEach((p,i)=>{ctx.globalAlpha=(i+1)/s.trail.length*.18;roundRect(p.x-10,p.y-6,20,12,3,'#55d8ff');}); ctx.globalAlpha=1;
+      ctx.translate(s.x,s.y); const ang=Math.atan2(s.vy,s.vx)+Math.PI/2;ctx.rotate(ang);
+      roundRect(-14,-9,28,18,4,s.auto?'#c9ff5d':'#f4f7fb');
+      ctx.fillStyle='#102033';ctx.fillRect(-9,-4,14,2);ctx.fillRect(-9,1,10,2); ctx.restore();
+    });
+  }
+
+  function drawParticles(){ particles.forEach(p=>{ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.color;ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}); }
+
+  function drawSuper(now){
+    const a=.5+.25*Math.sin(now/80); ctx.strokeStyle=`rgba(201,255,93,${a})`;ctx.lineWidth=4;ctx.strokeRect(3,3,W-6,H-6);
+    ctx.fillStyle='rgba(201,255,93,.95)';ctx.font='900 13px system-ui';ctx.textAlign='center';ctx.fillText('☎️ HUMAN CONTACT — BARRIERS OPEN',W/2,H*.27);
+  }
+
+  function endGame(){
+    if(state!=='play')return; state='over'; cancelAnimationFrame(raf); hud.classList.add('hidden'); gameover.classList.remove('hidden');
+    stats.score=Math.round(stats.score+stats.interviews*120+stats.calls*160); best=Math.max(best,stats.score); try { sessionStorage.setItem('jobhunt-best',best); } catch(_) {}
+    document.getElementById('bigScore').textContent=stats.score.toLocaleString();
+    document.getElementById('sApps').textContent=stats.apps; document.getElementById('sInts').textContent=stats.interviews; document.getElementById('sRejects').textContent=stats.rejects; document.getElementById('sGhosted').textContent=stats.ghosted; document.getElementById('sReposted').textContent=stats.reposted; document.getElementById('sCalls').textContent=stats.calls;
+    const result = stats.interviews>=5 ? 'You somehow made the modern hiring process look efficient.' : stats.interviews>=3 ? 'Strong work. Somewhere, an ATS is quietly reconsidering its life choices.' : 'Character-building. Apparently. One more go?';
+    document.getElementById('resultLine').textContent=result + ` Best this session: ${best.toLocaleString()}.`;
+  }
+
+  function shareText(){ return `I sent ${stats.apps} CVs, survived ${stats.rejects} recruitment barriers and landed ${stats.interviews} interview${stats.interviews===1?'':'s'} in The Job Hunt. Score: ${stats.score.toLocaleString()}. Your turn.`; }
+
+  async function share(){
+    const text=shareText();
+    try{ if(navigator.share){ await navigator.share({title:'The Job Hunt',text,url:location.protocol.startsWith('http')?location.href:undefined}); }
+      else { await navigator.clipboard.writeText(text); showToast('Score copied — paste it into LinkedIn.'); }
+    } catch(e) { if(e?.name!=='AbortError'){ try{await navigator.clipboard.writeText(text);showToast('Score copied.');}catch(_){showToast(text);} } }
+  }
+
+  function loop(now){ if(state!=='play')return; const dt=Math.min(.033,(now-last)/1000||0); last=now; update(dt,now); draw(now); if(state==='play')raf=requestAnimationFrame(loop); }
+
+  canvas.addEventListener('pointerdown',e=>{
+    if(state!=='play')return; const r=canvas.getBoundingClientRect(); const x=e.clientX-r.left,y=e.clientY-r.top;
+    if(y>H-175)return; fireAt(x,y,false);
+  });
+  playBtn.addEventListener('click',startGame); againBtn.addEventListener('click',startGame); shareBtn.addEventListener('click',share); phoneBtn.addEventListener('click',e=>{e.stopPropagation();useHuman();});
+  window.addEventListener('resize',resize); resize(); draw(performance.now());
+})();
