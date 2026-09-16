@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#102744"/>
+      <stop offset="0.48" stop-color="#081522"/>
+      <stop offset="1" stop-color="#050b14"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <text x="72" y="74" fill="#67dfff" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" letter-spacing="2">THE JOB HUNT · ARCADE</text>
+  <text x="68" y="178" fill="#f5f8ff" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="900">CV CHAOS</text>
+  <text x="72" y="246" fill="#d9ff69" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="900">GET YOUR CV THROUGH.</text>
+  <text x="72" y="375" fill="#f5f8ff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">60 seconds. One thumb.</text>
+  <text x="72" y="423" fill="#f5f8ff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">How many interviews can you land?</text>
+  <text x="72" y="521" fill="#91a6bd" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Built by Jonathan Hendry</text>
+  <text x="72" y="558" fill="#60758e" font-family="Arial, Helvetica, sans-serif" font-size="20">j0n1x303.github.io/the-job-hunt</text>
+
+  <g transform="translate(810 92)">
+    <rect x="0" y="0" width="315" height="430" rx="28" fill="#07131f" stroke="#2a4359" stroke-width="3"/>
+    <rect x="18" y="18" width="84" height="58" rx="12" fill="#0b1c2b"/>
+    <rect x="114" y="18" width="84" height="58" rx="12" fill="#0b1c2b"/>
+    <rect x="210" y="18" width="84" height="58" rx="12" fill="#0b1c2b"/>
+    <text x="30" y="38" fill="#71859f" font-family="Arial" font-size="10" font-weight="700">INTERVIEWS</text>
+    <text x="42" y="63" fill="#d9ff69" font-family="Arial" font-size="24" font-weight="900">3</text>
+    <text x="138" y="38" fill="#71859f" font-family="Arial" font-size="10" font-weight="700">TIME</text>
+    <text x="132" y="63" fill="#67dfff" font-family="Arial" font-size="24" font-weight="900">17.4</text>
+    <text x="226" y="38" fill="#71859f" font-family="Arial" font-size="10" font-weight="700">SHORTLIST</text>
+    <text x="235" y="63" fill="#ffca72" font-family="Arial" font-size="24" font-weight="900">5/8</text>
+
+    <text x="22" y="105" fill="#71859f" font-family="Arial" font-size="11" font-weight="700">MOTIVATION</text>
+    <rect x="22" y="118" width="270" height="12" rx="6" fill="#1d2a36"/>
+    <rect x="22" y="118" width="180" height="12" rx="6" fill="#ffca72"/>
+
+    <rect x="87" y="155" width="145" height="42" rx="12" fill="#0d2431" stroke="#67dfff" stroke-width="2"/>
+    <text x="103" y="181" fill="#bdeeff" font-family="Arial" font-size="15" font-weight="900">HIRING TEAM</text>
+
+    <g fill="#354451">
+      <rect x="16" y="236" width="283" height="10"/>
+      <rect x="16" y="310" width="283" height="10"/>
+      <rect x="16" y="382" width="283" height="10"/>
+    </g>
+    <g fill="#07131f">
+      <rect x="154" y="235" width="76" height="12"/>
+      <rect x="88" y="309" width="76" height="12"/>
+      <rect x="177" y="381" width="76" height="12"/>
+    </g>
+    <text x="20" y="230" fill="#91a0b5" font-family="Arial" font-size="11" font-weight="700">ATS</text>
+    <text x="20" y="304" fill="#91a0b5" font-family="Arial" font-size="11" font-weight="700">NO RESPONSE</text>
+    <text x="20" y="376" fill="#91a0b5" font-family="Arial" font-size="11" font-weight="700">GENERIC REJECTION</text>
+
+    <g filter="url(#glow)">
+      <g transform="translate(193 352)"><rect x="-14" y="-8" width="28" height="16" rx="4" fill="#0a1827" stroke="#67dfff" stroke-width="2"/><text x="-8" y="4" fill="#67dfff" font-family="Arial" font-size="8" font-weight="700">CV</text></g>
+      <g transform="translate(184 280)"><rect x="-14" y="-8" width="28" height="16" rx="4" fill="#0a1827" stroke="#67dfff" stroke-width="2"/><text x="-8" y="4" fill="#67dfff" font-family="Arial" font-size="8" font-weight="700">CV</text></g>
+      <g transform="translate(198 214)"><rect x="-14" y="-8" width="28" height="16" rx="4" fill="#0a1827" stroke="#67dfff" stroke-width="2"/><text x="-8" y="4" fill="#67dfff" font-family="Arial" font-size="8" font-weight="700">CV</text></g>
+    </g>
+  </g>
+</svg>
