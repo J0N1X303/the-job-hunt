@@ -125,8 +125,9 @@
 
   function spawnPower(){
     const kind=Math.random()<.55?'INTRO':'GOOD RECRUITER',side=Math.random()<.5?-1:1;
-    const x=clamp(bottomGap()+side*rnd(W*.22,W*.31),48,W-48),y=H*.77+rnd(-15,15);
-    powerups.push({id:++seq,kind,x,y,r:27,life:5.3,vx:rnd(-5,5),pulse:rnd(0,6.28)});
+    const centreMin=W*.24,centreMax=W*.76;
+    const x=clamp(bottomGap()+side*rnd(W*.14,W*.23),centreMin,centreMax),y=H*.77+rnd(-15,15);
+    powerups.push({id:++seq,kind,x,y,r:27,life:5.8,vx:rnd(-4,4),pulse:rnd(0,6.28)});
     const p=phase(),windows=[[4.8,6.3],[4.2,5.6],[3.7,5],[3.2,4.4]][p];nextPowerAt=elapsed+rnd(windows[0],windows[1]);
   }
 
@@ -163,7 +164,7 @@
       introUntil=now+4700;boostUntil=introUntil;motivationChange(motivation>80?4:8,'MOTIVATION BOOST');boom('NETWORK INTRO');floaters.push({t:'NEXT GAPS OPEN',x:p.x,y:p.y,l:1.1,color:'#7cf3ad'});
     }else{
       recruiterUntil=now+4300;boostUntil=recruiterUntil;motivationChange(motivation>80?5:10,'MOTIVATION BOOST');
-      const choices=obstacles.slice(1),gate=pick(choices.length?choices:obstacles);recruiterGateId=gate.id;recruiterGapX=clamp(p.x,52,W-52);boom('GOOD RECRUITER');floaters.push({t:'SHORTCUT OPEN',x:p.x,y:p.y,l:1.1,color:'#7cf3ad'});
+      const choices=obstacles.slice(1),gate=pick(choices.length?choices:obstacles);recruiterGateId=gate.id;recruiterGapX=clamp(p.x,W*.24,W*.76);boom('GOOD RECRUITER');floaters.push({t:'SHORTCUT OPEN',x:p.x,y:p.y,l:1.1,color:'#7cf3ad'});
     }
   }
 
