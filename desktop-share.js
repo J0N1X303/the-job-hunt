@@ -9,7 +9,7 @@
     setTimeout(()=>toast.classList.remove('show'),1600);
   };
   const shareText=()=>`I sent ${text('rSent')} CVs, got ${text('rShortlisted')} through to hiring teams and landed ${text('rInterviews')} interviews in 60 seconds of CV Chaos.`;
-  const shareUrl=()=>location.href.split('?')[0];
+  const shareUrl=()=> 'https://cvchaos.co.uk/?utm_source=share&utm_medium=referral&utm_campaign=cv_chaos_share';
 
   async function copyFallback(){
     const payload=`${shareText()}\n${shareUrl()}`;
