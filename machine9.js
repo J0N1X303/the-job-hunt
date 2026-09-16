@@ -237,10 +237,6 @@
       ctx.strokeStyle='rgba(124,243,173,.72)';ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(o.gapX-gapW/2,o.y-13);ctx.lineTo(o.gapX-gapW/2,o.y+13);ctx.moveTo(o.gapX+gapW/2,o.y-13);ctx.lineTo(o.gapX+gapW/2,o.y+13);ctx.stroke();
     }
     ctx.fillStyle=o.type==='NO RESPONSE'?'#8999ad':'#c4d1df';ctx.font='900 9px system-ui';ctx.textAlign='left';ctx.fillText(o.type,10,o.y+3);
-    if(o.type==='AI SCREEN'){
-      const scan=o.gapX+Math.sin(now/190+o.phase)*Math.min(28,gapW*.28);
-      ctx.fillStyle='rgba(174,140,255,.32)';ctx.fillRect(scan-2,o.y-13,4,26);ctx.strokeStyle='rgba(174,140,255,.45)';ctx.beginPath();ctx.moveTo(scan-10,o.y-13);ctx.lineTo(scan+10,o.y-13);ctx.stroke();
-    }
     ctx.restore();
   }
 
