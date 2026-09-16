@@ -35,7 +35,7 @@
     const short=line.length>75?line.slice(0,72)+'…':line;
     g.fillText(short,600,1025);
     g.fillStyle='#67dfff';g.font='900 23px system-ui';g.fillText('Built by Jonathan Hendry · linkedin.com/in/jshendry',600,1090);
-    g.fillStyle='#60758e';g.font='800 22px system-ui';g.fillText('j0n1x303.github.io/the-job-hunt',600,1130);
+    g.fillStyle='#60758e';g.font='800 22px system-ui';g.fillText('cvchaos.co.uk',600,1130);
     return c;
   }
 
