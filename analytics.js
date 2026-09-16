@@ -5,10 +5,14 @@
   };
   const n=id=>Number((document.getElementById(id)?.textContent||'0').replace(/[^0-9.-]/g,''))||0;
 
-  window.addEventListener('load',()=>track('game_view',{
-    source:new URLSearchParams(location.search).get('utm_source')||'direct',
-    campaign:new URLSearchParams(location.search).get('utm_campaign')||'none'
-  }));
+  window.addEventListener('load',()=>{
+    const params=new URLSearchParams(location.search);
+    track('game_view',{
+      source:params.get('utm_source')||'direct',
+      medium:params.get('utm_medium')||'none',
+      campaign:params.get('utm_campaign')||'none'
+    });
+  });
 
   document.getElementById('playBtn')?.addEventListener('click',()=>track('game_start'));
   document.getElementById('againBtn')?.addEventListener('click',()=>track('play_again'));
