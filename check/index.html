@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07101d">
+  <title>CV Chaos Check — What should you change next?</title>
+  <meta name="description" content="A free three-minute job-search check that helps you identify what to change next and gives you a practical seven-day reset.">
+  <link rel="canonical" href="https://cvchaos.co.uk/check/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="CV Chaos">
+  <meta property="og:title" content="CV Chaos Check — What should you change next?">
+  <meta property="og:description" content="A free three-minute job-search check. No signup. No CV upload. A practical seven-day reset based on your own search.">
+  <meta property="og:url" content="https://cvchaos.co.uk/check/">
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="844b5b1c-069b-4379-9e73-c0b9fd9bf98d"></script>
+  <link rel="stylesheet" href="check.css?v=1">
+</head>
+<body>
+  <main id="app" class="wrap">
+    <header class="brand">
+      <div class="logo">CV <span>CHAOS</span> · CHECK</div>
+      <div class="pill">FREE · NO SIGNUP</div>
+    </header>
+
+    <section id="intro">
+      <div class="hero">
+        <div class="eyebrow">THE JOB HUNT · REAL LIFE</div>
+        <h1>STOP GUESSING.<br><span>FIND THE NEXT MOVE.</span></h1>
+        <p>Answer a few questions about what is actually happening in your job search. CV Chaos will identify the part worth investigating first and give you a focused seven-day reset.</p>
+        <div class="privacy-strip"><span>About 3 minutes</span><span>No name or email</span><span>No CV upload</span><span>Your weekly history stays on this device</span></div>
+      </div>
+
+      <div id="welcomeBack" class="card welcome-back hidden">
+        <div class="section-title">Welcome back</div>
+        <h3>Time for another check?</h3>
+        <p id="welcomeText" class="lead"></p>
+        <button id="welcomeStart" type="button" class="btn primary" style="width:100%;margin-top:14px">RUN THIS WEEK'S CHECK</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title">What this is</div>
+        <h2>Not another CV score.</h2>
+        <p class="lead">This looks at your own job-search funnel. It does not pretend there is one magic interview rate or tell you to rewrite everything because an algorithm produced a low percentage.</p>
+        <button id="startBtn" type="button" class="btn primary" style="width:100%;margin-top:18px">START THE CV CHAOS CHECK</button>
+        <p class="hint">Use it again each week. The useful part is seeing whether the diagnosis changes when your results change.</p>
+      </div>
+    </section>
+
+    <section id="wizard" class="hidden">
+      <div class="progress" aria-label="Progress"><i></i><i></i><i></i><i></i></div>
+
+      <section class="card" data-step="0">
+        <div class="section-title">1 of 4 · Your target</div>
+        <h2>What are you actually looking for?</h2>
+        <div class="grid2" style="margin-top:16px">
+          <label class="field">Main role you're targeting<input id="role" type="text" placeholder="e.g. Commercial Director" autocomplete="off"></label>
+          <label class="field">Level<select id="level"><option>Entry / early career</option><option>Experienced individual contributor</option><option>Manager</option><option>Head of</option><option>Director</option><option>VP / Executive</option></select></label>
+          <label class="field">How long actively looking?<select id="weeks"><option value="1">Less than 2 weeks</option><option value="3">2–4 weeks</option><option value="6" selected>1–2 months</option><option value="12">3+ months</option></select></label>
+          <label class="field">How broad is the search?<select id="breadth"><option value="one">One clear role family</option><option value="related" selected>A few closely related titles</option><option value="wide">Quite broad across different roles</option></select></label>
+        </div>
+        <div class="actions"><button type="button" class="btn primary next">NEXT →</button></div>
+      </section>
+
+      <section class="card hidden" data-step="1">
+        <div class="section-title">2 of 4 · Your funnel</div>
+        <h2>What happened in roughly the last 30 days?</h2>
+        <p class="lead">Estimates are fine. A meaningful conversation means a recruiter, hiring manager, referral or employer contact — not an automated acknowledgement.</p>
+        <div class="grid3" style="margin-top:16px">
+          <label class="field">Applications<input id="apps" type="number" min="0" max="500" value="20" inputmode="numeric"></label>
+          <label class="field">Meaningful conversations<input id="convs" type="number" min="0" max="500" value="4" inputmode="numeric"></label>
+          <label class="field">First interviews<input id="interviews" type="number" min="0" max="500" value="2" inputmode="numeric"></label>
+          <label class="field">Final stages<input id="finals" type="number" min="0" max="500" value="0" inputmode="numeric"></label>
+          <label class="field">Offers<input id="offers" type="number" min="0" max="500" value="0" inputmode="numeric"></label>
+        </div>
+        <p id="funnelWarn" class="hint" style="color:var(--red)"></p>
+        <div class="actions"><button type="button" class="btn secondary back">← BACK</button><button type="button" class="btn primary next">NEXT →</button></div>
+      </section>
+
+      <section class="card hidden" data-step="2">
+        <div class="section-title">3 of 4 · How you reach the market</div>
+        <h2>Volume doesn't tell us enough.</h2>
+        <div class="grid2" style="margin-top:16px">
+          <label class="field">Warm or direct approaches in the last 30 days<input id="warm" type="number" min="0" max="200" value="4" inputmode="numeric"></label>
+          <label class="field">Of your last 10 applications, how many were genuinely strong fits?<input id="fit" type="number" min="0" max="10" value="7" inputmode="numeric"></label>
+          <label class="field" style="grid-column:1/-1">How often do you materially tailor the top third of your CV/profile?<select id="tailor"><option value="rarely">Rarely</option><option value="sometimes" selected>Sometimes</option><option value="often">Most of the time</option></select></label>
+        </div>
+        <div class="actions"><button type="button" class="btn secondary back">← BACK</button><button type="button" class="btn primary next">NEXT →</button></div>
+      </section>
+
+      <section class="card hidden" data-step="3">
+        <div class="section-title">4 of 4 · The human bit</div>
+        <h2>How are you doing with it?</h2>
+        <div style="margin-top:20px">
+          <div class="range-head"><span class="field">Motivation right now</span><b id="motValue">60%</b></div>
+          <input id="mot" type="range" min="0" max="100" value="60">
+          <div class="range-labels"><span>Running on empty</span><span>Managing</span><span>Strong</span></div>
+        </div>
+        <label class="field" style="margin-top:20px">Which feels closest?<select id="feeling"><option value="noidea">I genuinely don't know what to change</option><option value="cv">I suspect my CV / positioning</option><option value="market">I think I'm not reaching the right people</option><option value="interview">I get traction but need more progression</option><option value="volume">I probably need more activity</option></select></label>
+        <div class="actions"><button type="button" class="btn secondary back">← BACK</button><button id="diagnoseBtn" type="button" class="btn primary">SHOW MY DIAGNOSIS →</button></div>
+      </section>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="card result-hero">
+        <div class="section-title">Your current priority</div>
+        <h2 id="resultTitle"></h2>
+        <p id="resultExplain" class="lead"></p>
+        <span id="confidence" class="confidence"></span>
+        <div class="metrics"><div class="metric"><b id="mApps">0</b><span>Applications</span></div><div class="metric"><b id="mConvs">0</b><span>Conversations</span></div><div class="metric"><b id="mInts">0</b><span>Interviews</span></div><div class="metric"><b id="mMot">0%</b><span>Motivation</span></div></div>
+      </div>
+
+      <div id="compareCard" class="card hidden">
+        <div class="section-title">Since your last check</div>
+        <h3 id="compareDate"></h3>
+        <div class="delta"><div><b id="dApps">0</b><span>Applications</span></div><div><b id="dConvs">0</b><span>Conversations</span></div><div><b id="dInts">0</b><span>Interviews</span></div><div><b id="dMot">0</b><span>Motivation</span></div></div>
+        <p id="previousDiagnosis" class="hint"></p>
+      </div>
+
+      <div class="grid2" style="margin-top:14px">
+        <div class="card" style="margin-top:0"><div class="section-title">Why we're saying that</div><ul id="signals" class="signal-list"></ul></div>
+        <div class="card" style="margin-top:0"><div class="section-title">Don't spend this week doing</div><ul id="donts" class="plain-list no"></ul></div>
+      </div>
+
+      <div class="card"><div class="section-title">Your 7-day reset</div><h3>Run a better experiment.</h3><ol id="planList" class="plan-list"></ol></div>
+      <div id="energyNote" class="card hidden"><div class="section-title">Because your motivation is low</div><h3>Do less, deliberately.</h3><p class="lead">CV Chaos has reduced the plan rather than increasing your workload. The aim is useful evidence without turning the search into a full-time punishment.</p></div>
+
+      <div class="card">
+        <div class="section-title">Make the weekly check useful</div>
+        <h3>Save this result on this device.</h3>
+        <p class="lead">Come back next week and CV Chaos can compare your activity and diagnosis. Nothing is synced to an account.</p>
+        <button id="saveBtn" type="button" class="btn ghost" style="width:100%;margin-top:14px">SAVE THIS WEEK'S CHECK</button>
+        <p id="saveStatus" class="hint"></p>
+        <button id="deleteHistory" type="button" class="danger-link">Delete saved check history from this device</button>
+      </div>
+
+      <div class="card">
+        <div class="section-title">Help improve it</div>
+        <h3>Did this actually help?</h3>
+        <p class="lead">This is an experiment built to support people navigating the job market. Honest feedback is more useful than polite feedback.</p>
+        <p class="field" style="margin-top:16px">Did this change what you were planning to do next?</p>
+        <div class="feedback-options">
+          <label class="choice"><input type="radio" name="changed" value="yes"><span>Yes</span></label><label class="choice"><input type="radio" name="changed" value="partly"><span>Partly</span></label><label class="choice"><input type="radio" name="changed" value="no"><span>No</span></label>
+        </div>
+        <p class="field" style="margin-top:16px">How useful was the result?</p>
+        <div class="feedback-options">
+          <label class="choice"><input type="radio" name="useful" value="very"><span>Very useful</span></label><label class="choice"><input type="radio" name="useful" value="somewhat"><span>Somewhat</span></label><label class="choice"><input type="radio" name="useful" value="not"><span>Not useful</span></label>
+        </div>
+        <label class="field" style="margin-top:16px">One thing you'd change <span class="micro">(optional — please don't include names, emails or other personal details)</span><textarea id="feedbackText" maxlength="400" placeholder="What would make this more useful?"></textarea></label>
+        <button id="feedbackBtn" type="button" class="btn ghost" style="width:100%;margin-top:12px">SEND FEEDBACK</button>
+        <p id="feedbackStatus" class="feedback-status"></p>
+      </div>
+
+      <div class="actions"><button id="editBtn" type="button" class="btn secondary">← CHANGE ANSWERS</button><button id="restartBtn" type="button" class="btn primary">START AGAIN</button></div>
+    </section>
+
+    <footer class="footer">CV Chaos does not ask for your name, email or CV. Your diagnostic answers and weekly history stay in this browser. Anonymous page and feedback events are measured with privacy-focused Umami analytics so the experiment can be improved. Umami says its tracker uses no cookies and does not collect personally identifiable information. <br><a href="https://www.linkedin.com/in/jshendry/" target="_blank" rel="noopener noreferrer">Built by Jonathan Hendry · Commercial leader exploring what's next</a></footer>
+  </main>
+  <script src="check.js?v=1"></script>
+</body>
+</html>
