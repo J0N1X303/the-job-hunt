@@ -26,7 +26,7 @@
       <div class="hero">
         <div class="eyebrow">THE JOB HUNT · REAL LIFE</div>
         <h1>STOP GUESSING.<br><span>FIND THE NEXT MOVE.</span></h1>
-        <p>Answer a few questions about what is actually happening in your job search. CV Chaos will identify the part worth investigating first and give you a clear focus for the week ahead.</p>
+        <p>Answer a few questions about where you are now — even if you haven't started applying yet. CV Chaos will identify the part worth focusing on first and give you a clear focus for the week ahead.</p>
         <div class="privacy-strip"><span>About 3 minutes</span><span>No name or email</span><span>No CV upload</span><span>Your weekly history stays on this device</span></div>
       </div>
 
@@ -40,7 +40,7 @@
       <div class="card">
         <div class="section-title">What this is</div>
         <h2>Not another CV score.</h2>
-        <p class="lead">This looks at your own job-search funnel. It does not pretend there is one magic interview rate or tell you to rewrite everything because an algorithm produced a low percentage.</p>
+        <p class="lead">This looks at where you are in the job-search journey and, once you've started applying, your own funnel. It does not pretend there is one magic interview rate or tell you to rewrite everything because an algorithm produced a low percentage.</p>
         <button id="startBtn" type="button" class="btn primary" style="width:100%;margin-top:18px">START THE CV CHAOS CHECK</button>
         <p class="hint">Use it again each week. The useful part is seeing whether your focus changes when your results change.</p>
       </div>
@@ -53,11 +53,13 @@
         <div class="section-title">1 of 4 · Your target</div>
         <h2>What are you actually looking for?</h2>
         <div class="grid2" style="margin-top:16px">
+          <label class="field" style="grid-column:1/-1">Where are you right now?<select id="searchStage"><option value="active" selected>I'm actively looking / applying</option><option value="considering">I'm considering a change / haven't started applying yet</option></select></label>
           <label class="field">Main role you're targeting<input id="role" type="text" placeholder="e.g. Commercial Director" autocomplete="off"></label>
           <label class="field">Level<select id="level"><option>Entry / early career</option><option>Experienced individual contributor</option><option>Manager</option><option>Head of</option><option>Director</option><option>VP / Executive</option></select></label>
           <label class="field">How long actively looking?<select id="weeks"><option value="1">Less than 2 weeks</option><option value="3">2–4 weeks</option><option value="6" selected>1–2 months</option><option value="12">3+ months</option></select></label>
           <label class="field">How broad is the search?<select id="breadth"><option value="one">One clear role family</option><option value="related" selected>A few closely related titles</option><option value="wide">Quite broad across different roles</option></select></label>
         </div>
+        <p id="preSearchHint" class="hint hidden">We'll skip the application funnel and give you a practical starting point instead.</p>
         <div class="actions"><button type="button" class="btn primary next">NEXT →</button></div>
       </section>
 
@@ -189,5 +191,6 @@
     <footer class="footer">CV Chaos does not ask for your name, email or CV. Your diagnostic answers and weekly history stay in this browser. Anonymous product events and structured feedback are measured with privacy-focused Umami analytics so the experiment can be improved; individual application counts, interview counts and motivation scores are not sent with those events. <br><a href="https://www.linkedin.com/in/jshendry/" target="_blank" rel="noopener noreferrer">Built by Jonathan Hendry · Commercial leader exploring what's next</a></footer>
   </main>
   <script src="check.js?v=2"></script>
+  <script src="considering.js?v=1"></script>
 </body>
 </html>
