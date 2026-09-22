@@ -17,6 +17,8 @@
   document.getElementById('playBtn')?.addEventListener('click',()=>track('game_start'));
   document.getElementById('checkBtn')?.addEventListener('click',()=>track('check_click',{source:'homepage'}));
   document.getElementById('resultCheckBtn')?.addEventListener('click',()=>track('check_click',{source:'game_result'}));
+  document.getElementById('redundancyBtn')?.addEventListener('click',()=>track('redundancy_click',{source:'homepage'}));
+  document.getElementById('resultRedundancyBtn')?.addEventListener('click',()=>track('redundancy_click',{source:'game_result'}));
   document.getElementById('againBtn')?.addEventListener('click',()=>track('play_again'));
   document.getElementById('saveBtn')?.addEventListener('click',()=>track('save_results',{
     interviews:n('rInterviews'),reached_hiring_team:n('rShortlisted')
