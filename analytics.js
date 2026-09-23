@@ -14,10 +14,13 @@
     });
   });
 
-  document.getElementById('playBtn')?.addEventListener('click',()=>track('game_start'));
+  document.getElementById('playBtn')?.addEventListener('click',()=>track('game_start',{source:'arcade'}));
+  document.getElementById('desktopPlayBtn')?.addEventListener('click',()=>track('landing_route',{route:'play'}));
   document.getElementById('checkBtn')?.addEventListener('click',()=>track('check_click',{source:'homepage'}));
+  document.getElementById('desktopCheckBtn')?.addEventListener('click',()=>track('check_click',{source:'desktop_home'}));
   document.getElementById('resultCheckBtn')?.addEventListener('click',()=>track('check_click',{source:'game_result'}));
   document.getElementById('redundancyBtn')?.addEventListener('click',()=>track('redundancy_click',{source:'homepage'}));
+  document.getElementById('desktopRedundancyBtn')?.addEventListener('click',()=>track('redundancy_click',{source:'desktop_home'}));
   document.getElementById('resultRedundancyBtn')?.addEventListener('click',()=>track('redundancy_click',{source:'game_result'}));
   document.getElementById('againBtn')?.addEventListener('click',()=>track('play_again'));
   document.getElementById('saveBtn')?.addEventListener('click',()=>track('save_results',{
