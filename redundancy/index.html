@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#07101d">
 
-  <title>Made redundant? Start here | CV Chaos</title>
+  <title>Made Redundant. Now What? | UK redundancy field guide | CV Chaos</title>
 
   <meta name="description" content="A practical starting point after redundancy: free job-search support from CV Chaos and Made Redundant. Now What?, a 30-day field guide for experienced professionals in the UK.">
 
@@ -13,14 +13,32 @@
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CV Chaos">
-  <meta property="og:title" content="Made redundant. Now what?">
+  <meta property="og:title" content="Made Redundant. Now What?">
   <meta property="og:description" content="A practical starting point for the first few days, the job search that follows, and the role you actually want next.">
   <meta property="og:url" content="https://cvchaos.co.uk/redundancy/">
   <meta property="og:image" content="https://cvchaos.co.uk/redundancy/book-cover.svg">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Made redundant. Now what?">
+  <meta name="twitter:title" content="Made Redundant. Now What?">
   <meta name="twitter:description" content="A practical UK field guide and free job-search tools from CV Chaos.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Book",
+    "name": "Made Redundant. Now What?",
+    "author": {"@type": "Person", "name": "Jonathan S. Hendry", "url": "https://hendrycommercial.co.uk/"},
+    "bookFormat": ["https://schema.org/Paperback", "https://schema.org/EBook"],
+    "inLanguage": "en-GB",
+    "description": "A practical 30-day job-search field guide for experienced professionals in the UK.",
+    "url": "https://cvchaos.co.uk/redundancy/",
+    "offers": {
+      "@type": "Offer",
+      "url": "https://www.amazon.co.uk/dp/B0HKWHMFNP",
+      "priceCurrency": "GBP",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
 
   <script
     defer
@@ -112,7 +130,7 @@
 
         <div class="coverNote">
           Paperback £9.99 · Kindle £4.99<br>
-          <b>Currently in Amazon review</b>
+          <b>Published on Amazon</b>
         </div>
 
       </div>
@@ -289,31 +307,33 @@
           </div>
 
           <h3>
-            In review now
+            Available now
           </h3>
 
           <p>
-            Both formats have been submitted to Amazon. I will switch these
-            buttons on as soon as the listings are live.
+            The paperback and Kindle editions are now published on Amazon UK.
+            Amazon links the available formats on the book detail page.
           </p>
 
-          <button
-            class="buy disabled"
-            type="button"
-            disabled>
-            Paperback · £9.99
-          </button>
+          <a
+            class="buy"
+            href="https://www.amazon.co.uk/dp/B0HKWHMFNP?utm_source=cvchaos&utm_medium=referral&utm_campaign=book_launch"
+            target="_blank"
+            rel="noopener noreferrer">
+            Paperback · £9.99 →
+          </a>
 
-          <button
-            class="buy disabled"
-            type="button"
-            disabled>
-            Kindle · £4.99
-          </button>
+          <a
+            class="buy secondaryBuy"
+            href="https://www.amazon.co.uk/dp/B0HKWHMFNP?utm_source=cvchaos&utm_medium=referral&utm_campaign=book_launch"
+            target="_blank"
+            rel="noopener noreferrer">
+            Kindle · £4.99 →
+          </a>
 
           <p class="micro">
-            No paid ads. No bulk print run. This is being tested the same way
-            the book recommends approaching a job search: evidence first.
+            Written from inside the process rather than after a neat ending:
+            practical systems, real search data and tools you can use immediately.
           </p>
 
         </div>
@@ -340,6 +360,10 @@
 
       <p>
         The book is the complete version. CV Chaos stays the free front door.
+      </p>
+
+      <p class="authorLink">
+        Written by <a href="https://hendrycommercial.co.uk/?utm_source=cvchaos&utm_medium=referral&utm_campaign=book_author" target="_blank" rel="noopener noreferrer">Jonathan S. Hendry ↗</a>, a commercial leader who built the system while navigating redundancy himself.
       </p>
 
       <div class="storyLinks">
@@ -442,14 +466,21 @@
 
 
       document
-        .querySelector('a[href*="hendrycommercial.co.uk"]')
-        ?.addEventListener('click', () => {
-
+        .querySelectorAll('a[href*="hendrycommercial.co.uk"]')
+        .forEach(a => a.addEventListener('click', () => {
           track('hendry_commercial_click', {
-            placement: 'redundancy_footer'
+            placement: a.closest('section')?.className || 'redundancy_footer'
           });
+        }));
 
-        });
+      document
+        .querySelectorAll('a[href*="amazon.co.uk"]')
+        .forEach(a => a.addEventListener('click', () => {
+          track('book_amazon_click', {
+            format: a.textContent.includes('Kindle') ? 'kindle' : 'paperback',
+            placement: 'redundancy_book'
+          });
+        }));
 
 
       document
