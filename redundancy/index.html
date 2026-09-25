@@ -46,7 +46,7 @@
     data-website-id="844b5b1c-069b-4379-9e73-c0b9fd9bf98d">
   </script>
 
-  <link rel="stylesheet" href="redundancy.css?v=20260925-3">
+  <link rel="stylesheet" href="redundancy.css?v=20260925-4">
 </head>
 
 <body>
@@ -485,15 +485,18 @@
           const x = (event.clientX - rect.left) / rect.width;
           const y = (event.clientY - rect.top) / rect.height;
 
-          coverTile.style.setProperty('--tilt-x', `${(0.5 - y) * 7}deg`);
-          coverTile.style.setProperty('--tilt-y', `${(x - 0.5) * 8}deg`);
+          const shiftX = Math.round((x - 0.5) * 6);
+          const shiftY = Math.round((y - 0.5) * 6);
+
+          coverTile.style.setProperty('--shift-x', `${shiftX}px`);
+          coverTile.style.setProperty('--shift-y', `${shiftY}px`);
           coverTile.style.setProperty('--glow-x', `${x * 100}%`);
           coverTile.style.setProperty('--glow-y', `${y * 100}%`);
         });
 
         coverTile.addEventListener('pointerleave', () => {
-          coverTile.style.setProperty('--tilt-x', '0deg');
-          coverTile.style.setProperty('--tilt-y', '0deg');
+          coverTile.style.setProperty('--shift-x', '0px');
+          coverTile.style.setProperty('--shift-y', '0px');
           coverTile.style.setProperty('--glow-x', '50%');
           coverTile.style.setProperty('--glow-y', '50%');
         });
