@@ -46,7 +46,7 @@
     data-website-id="844b5b1c-069b-4379-9e73-c0b9fd9bf98d">
   </script>
 
-  <link rel="stylesheet" href="redundancy.css?v=20260925-2">
+  <link rel="stylesheet" href="redundancy.css?v=20260925-3">
 </head>
 
 <body>
@@ -120,9 +120,12 @@
       </div>
 
 
-      <div
-        class="coverWrap"
-        aria-label="Made Redundant. Now What? book cover">
+      <a
+        class="coverWrap coverTile"
+        href="#book"
+        aria-label="See Made Redundant. Now What? formats and purchase options">
+
+        <span class="coverGlow" aria-hidden="true"></span>
 
         <img
           src="book-cover.svg"
@@ -131,9 +134,10 @@
         <div class="coverNote">
           Paperback £9.99 · Kindle £4.99<br>
           <b>Published on Amazon</b>
+          <span class="coverCta">SEE THE GUIDE &amp; FORMATS ↓</span>
         </div>
 
-      </div>
+      </a>
     </section>
 
 
@@ -472,6 +476,29 @@
             placement: a.closest('section')?.className || 'redundancy_footer'
           });
         }));
+
+      const coverTile = document.querySelector('.coverTile');
+
+      if (coverTile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        coverTile.addEventListener('pointermove', (event) => {
+          const rect = coverTile.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width;
+          const y = (event.clientY - rect.top) / rect.height;
+
+          coverTile.style.setProperty('--tilt-x', `${(0.5 - y) * 7}deg`);
+          coverTile.style.setProperty('--tilt-y', `${(x - 0.5) * 8}deg`);
+          coverTile.style.setProperty('--glow-x', `${x * 100}%`);
+          coverTile.style.setProperty('--glow-y', `${y * 100}%`);
+        });
+
+        coverTile.addEventListener('pointerleave', () => {
+          coverTile.style.setProperty('--tilt-x', '0deg');
+          coverTile.style.setProperty('--tilt-y', '0deg');
+          coverTile.style.setProperty('--glow-x', '50%');
+          coverTile.style.setProperty('--glow-y', '50%');
+        });
+      }
+
 
       document
         .querySelectorAll('a[href*="amazon.co.uk"]')
